@@ -86,6 +86,10 @@ export default tseslint.config(
         {
           selector: 'interface',
           format: ['PascalCase'],
+          filter: {
+            regex: '^(Register|ImportMeta|ImportMetaEnv)$',
+            match: false,
+          },
           custom: {
             regex: '^I[A-Z]',
             match: true,
@@ -95,7 +99,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['src/ui/components/ui/**/*.tsx'],
+    files: ['src/ui/components/ui/**/*.tsx', 'src/app/router/routes/**/*.tsx'],
     rules: {
       'react-refresh/only-export-components': 'off',
     },

@@ -1,0 +1,22 @@
+export const queryKeys = {
+  session: () => ['session'] as const,
+
+  nfts: {
+    all: () => ['nfts'] as const,
+    list: (params: object) => ['nfts', 'list', params] as const,
+    detail: (nftId: string) => ['nfts', 'detail', nftId] as const,
+  },
+
+  user: (userId: string) => ({
+    all: () => ['user', userId] as const,
+    favorites: () => ['user', userId, 'favorites'] as const,
+    cart: () => ['user', userId, 'cart'] as const,
+    quote: (params: object) => ['user', userId, 'quote', params] as const,
+    orders: {
+      all: () => ['user', userId, 'orders'] as const,
+      detail: (orderId: string) => ['user', userId, 'orders', orderId] as const,
+    },
+    profile: () => ['user', userId, 'profile'] as const,
+    wallets: () => ['user', userId, 'wallets'] as const,
+  }),
+};
