@@ -1,0 +1,8 @@
+dist
+node_modules
+coverage
+playwright-report
+test-results
+lighthouse/reports
+src/app/router/routeTree.gen.ts
+yarn.lock
