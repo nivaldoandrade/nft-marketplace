@@ -27,6 +27,7 @@ export { SearchIcon } from './SearchIcon';
 export { SearchOutlineIcon } from './SearchOutlineIcon';
 export { ShopIcon } from './ShopIcon';
 export { StarIcon } from './StarIcon';
+export { TrashIcon } from './TrashIcon';
 export { TwitterIcon } from './TwitterIcon';
 export { UserIcon } from './UserIcon';
 export { UserOutlineIcon } from './UserOutlineIcon';

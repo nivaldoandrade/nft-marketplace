@@ -1,12 +1,12 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 
 import { useAuth } from '@/app/contexts/AuthContext/useAuth';
+import { useCart } from '@/app/hooks/queries/cart/useCart';
 import { AccountMenu } from '@/ui/components/AccountMenu';
 import { HeartIcon, HomeIcon, ScanIcon, ShopIcon, UserIcon } from '@/ui/components/Icons';
 import { useAuthModal } from '@/ui/hooks/useAuthModal';
 import { useOpenFavoritesPage } from '@/ui/hooks/useOpenFavoritesPage';
 import { cn } from '@/ui/utils/cn';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 import { SEARCH_INPUT_ID, scrollToCatalog } from '@/ui/utils/sections';
 
 const itemClassName =
@@ -19,6 +19,7 @@ export function MobileNav() {
   const { isSignedIn } = useAuth();
   const { open: openAuthModal } = useAuthModal();
   const openFavoritesPage = useOpenFavoritesPage();
+  const { itemsCount: cartCount } = useCart();
 
   function handleSearch() {
     const input = document.getElementById(SEARCH_INPUT_ID);
@@ -93,14 +94,17 @@ export function MobileNav() {
             <ScanIcon className="h-6 w-[27px]" />
           </button>
 
-          <button
-            type="button"
-            aria-label="Carrinho"
+          <Link
+            to="/carrinho"
+            aria-label={
+              cartCount > 0
+                ? `Carrinho, ${cartCount} ${cartCount === 1 ? 'item' : 'itens'}`
+                : 'Carrinho'
+            }
             className={cn(itemClassName, 'left-[calc(50%+76px+(50%-76px)*0.145-22px)]')}
-            onClick={() => notifyUnavailable('O carrinho')}
           >
             <ShopIcon className="size-5" />
-          </button>
+          </Link>
           {isSignedIn ? (
             <AccountMenu side="top">
               <button

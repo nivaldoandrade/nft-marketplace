@@ -2,6 +2,7 @@ import { useNavigate, useRouterState, useSearch } from '@tanstack/react-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useAuth } from '@/app/contexts/AuthContext/useAuth';
+import { useCart } from '@/app/hooks/queries/cart/useCart';
 import { useAuthModal } from '@/ui/hooks/useAuthModal';
 import { useIsSectionActive } from '@/ui/hooks/useIsSectionActive';
 import { getFirstName, getInitials } from '@/ui/utils/initials';
@@ -18,6 +19,7 @@ export function useHeader() {
   const navigate = useNavigate();
   const { user, isSignedIn } = useAuth();
   const { open: openAuthModal } = useAuthModal();
+  const { itemsCount: cartCount } = useCart();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const urlQuery = useSearch({ strict: false, select: (search) => search.q });
 
@@ -147,5 +149,10 @@ export function useHeader() {
     initials: user ? getInitials(user.displayName) : '',
     firstName: user ? getFirstName(user.displayName) : '',
     openAuthModal,
+    cartCount,
+    cartLabel:
+      cartCount === 0
+        ? 'Carrinho vazio'
+        : `Carrinho, ${cartCount} ${cartCount === 1 ? 'item' : 'itens'}`,
   };
 }

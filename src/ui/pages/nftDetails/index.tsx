@@ -1,5 +1,6 @@
-import { getRouteApi, Link } from '@tanstack/react-router';
+import { getRouteApi } from '@tanstack/react-router';
 
+import { Breadcrumb } from '@/ui/components/Breadcrumb';
 import { Container } from '@/ui/components/Container';
 import { MobileBuyBar } from '@/ui/pages/nftDetails/components/MobileBuyBar';
 import { NftDetailsFeedback } from '@/ui/pages/nftDetails/components/NftDetailsFeedback';
@@ -10,7 +11,6 @@ import { NftTabs } from '@/ui/pages/nftDetails/components/NftTabs';
 import { PurchaseActions } from '@/ui/pages/nftDetails/components/PurchaseActions';
 import { RelatedNfts } from '@/ui/pages/nftDetails/components/RelatedNfts';
 import { useNftDetails } from '@/ui/pages/nftDetails/useNftDetails';
-import { CATALOG_SECTION_ID } from '@/ui/utils/sections';
 
 const route = getRouteApi('/nft/$nftId');
 
@@ -40,25 +40,14 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
     handleShowReviews,
     isFavorite,
     handleToggleFavorite,
+    isAdding,
+    handleBuy,
+    handleAddToCart,
   } = useNftDetails(nftId);
 
   return (
     <Container className="md:pt-8">
-      <nav aria-label="Trilha de navegação" className="hidden md:block">
-        <ol className="flex gap-1.5 text-[15px] leading-4 font-bold">
-          <li>
-            <Link to="/" className="hover:text-accent">
-              Início
-            </Link>
-          </li>
-          <li aria-hidden="true">/</li>
-          <li>
-            <Link to="/" hash={CATALOG_SECTION_ID} className="hover:text-accent">
-              Mercado
-            </Link>
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumb className="hidden md:block" />
 
       {isNotFound ? (
         <NftDetailsFeedback variant="not-found" />
@@ -90,6 +79,8 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
                 isSoldOut={isSoldOut}
                 quantityLimitMessage={quantityLimitMessage}
                 isFavorite={isFavorite}
+                isAdding={isAdding}
+                onBuy={handleBuy}
                 onIncrease={handleIncrease}
                 onDecrease={handleDecrease}
                 onToggleFavorite={handleToggleFavorite}
@@ -108,6 +99,9 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
             maxQuantity={maxQuantity}
             isSoldOut={isSoldOut}
             quantityLimitMessage={quantityLimitMessage}
+            isAdding={isAdding}
+            onBuy={handleBuy}
+            onAddToCart={handleAddToCart}
             onIncrease={handleIncrease}
             onDecrease={handleDecrease}
           />

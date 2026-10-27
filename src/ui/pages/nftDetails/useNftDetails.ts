@@ -1,6 +1,10 @@
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 
+import { getApiErrorCode, getErrorMessage } from '@/app/errors/apiErrors';
+import { useAddToCart } from '@/app/hooks/mutations/cart/useCartActions';
 import { useGetNftById } from '@/app/hooks/queries/nfts/useGetNftById';
+import { toast } from '@/app/libs/toast';
 import type { EditionType, NftEdition } from '@/app/types/Nft';
 import { useFavoriteAction } from '@/ui/hooks/useFavoriteAction';
 
@@ -10,6 +14,8 @@ export const REVIEWS_TAB = 'reviews';
 export function useNftDetails(nftId: string) {
   const { nft, isPending, isError, isNotFound, refetch } = useGetNftById(nftId);
   const { isFavorite, handleToggleFavorite } = useFavoriteAction(nft);
+  const { addToCart, isAdding } = useAddToCart();
+  const navigate = useNavigate();
 
   const [selectedType, setSelectedType] = useState<EditionType | null>(null);
   const [requestedQuantity, setRequestedQuantity] = useState(1);
@@ -40,6 +46,34 @@ export function useNftDetails(nftId: string) {
     setRequestedQuantity(Math.max(quantity - 1, 1));
   }
 
+  async function addSelectionToCart() {
+    if (!nft || !selectedEdition) {
+      return false;
+    }
+
+    try {
+      await addToCart({ nftId: nft.id, editionType: selectedEdition.type, quantity });
+      return true;
+    } catch (error) {
+      toast.error(getErrorMessage(getApiErrorCode(error)));
+      return false;
+    }
+  }
+
+  async function handleBuy() {
+    if (await addSelectionToCart()) {
+      navigate({ to: '/carrinho' });
+    }
+  }
+
+  async function handleAddToCart() {
+    if (await addSelectionToCart()) {
+      toast.success('Adicionado ao carrinho.', {
+        action: { label: 'Ver carrinho', onClick: () => navigate({ to: '/carrinho' }) },
+      });
+    }
+  }
+
   function handleShowReviews() {
     setActiveTab(REVIEWS_TAB);
     document.getElementById('nft-tabs')?.scrollIntoView({ block: 'start' });
@@ -65,6 +99,9 @@ export function useNftDetails(nftId: string) {
     handleShowReviews,
     isFavorite,
     handleToggleFavorite,
+    isAdding,
+    handleBuy,
+    handleAddToCart,
   };
 }
 

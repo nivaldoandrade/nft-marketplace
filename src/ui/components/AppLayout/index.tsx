@@ -7,9 +7,9 @@ import { Toaster } from '@/ui/components/Toaster';
 import { AuthDialog } from '@/ui/pages/auth';
 
 export function AppLayout() {
-  const isNftDetails = useRouterState({
-    select: (state) => state.location.pathname.startsWith('/nft/'),
-  });
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+  const isNftDetails = pathname.startsWith('/nft/');
+  const hidesMobileNav = isNftDetails || pathname === '/carrinho';
 
   return (
     <>
@@ -25,10 +25,14 @@ export function AppLayout() {
       </main>
       <Footer
         className={
-          isNftDetails ? 'pb-[calc(10.5rem+env(safe-area-inset-bottom))] md:pb-6' : undefined
+          isNftDetails
+            ? 'pb-[calc(10.5rem+env(safe-area-inset-bottom))] md:pb-6'
+            : hidesMobileNav
+              ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]'
+              : undefined
         }
       />
-      {!isNftDetails && <MobileNav />}
+      {!hidesMobileNav && <MobileNav />}
       <AuthDialog />
       <Toaster />
     </>

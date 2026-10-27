@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { AccountMenu } from '@/ui/components/AccountMenu';
 import { Container } from '@/ui/components/Container';
 import { NavLink } from '@/ui/components/Header/NavLink';
@@ -33,6 +35,8 @@ export function Header() {
     initials,
     firstName,
     openAuthModal,
+    cartCount,
+    cartLabel,
   } = useHeader();
   const catalogLink = useCatalogLink();
 
@@ -140,14 +144,21 @@ export function Header() {
               </button>
             )}
 
-            <button
-              type="button"
-              aria-label="Carrinho"
-              onClick={() => notifyUnavailable('O carrinho')}
+            <Link
+              to="/carrinho"
+              aria-label={cartLabel}
               className="relative flex h-6 w-[31px] shrink-0 items-center hover:text-accent"
             >
-              <CartIcon className="h-6 w-[25px]" />
-            </button>
+              <CartIcon className="size-6" />
+              {cartCount > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute top-0 right-0 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] leading-[13px] font-medium text-primary-foreground outline-2 outline-background"
+                >
+                  {cartCount > 9 ? '9+' : cartCount}
+                </span>
+              )}
+            </Link>
 
             {isSignedIn ? (
               <AccountMenu>

@@ -1,7 +1,6 @@
 import { ShopIcon } from '@/ui/components/Icons';
-import { QuantityStepper } from '@/ui/pages/nftDetails/components/QuantityStepper';
+import { QuantityStepper } from '@/ui/components/QuantityStepper';
 import { formatPrice } from '@/ui/utils/formatPrice';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
 type MobileBuyBarProps = {
   price: string;
@@ -9,6 +8,9 @@ type MobileBuyBarProps = {
   maxQuantity: number;
   isSoldOut: boolean;
   quantityLimitMessage: string | null;
+  isAdding: boolean;
+  onBuy: () => void;
+  onAddToCart: () => void;
   onIncrease: () => void;
   onDecrease: () => void;
 };
@@ -19,6 +21,9 @@ export function MobileBuyBar({
   maxQuantity,
   isSoldOut,
   quantityLimitMessage,
+  isAdding,
+  onBuy,
+  onAddToCart,
   onIncrease,
   onDecrease,
 }: MobileBuyBarProps) {
@@ -59,16 +64,16 @@ export function MobileBuyBar({
       <div className="flex gap-3">
         <button
           type="button"
-          disabled={isSoldOut}
-          onClick={() => notifyUnavailable('A compra')}
+          disabled={isSoldOut || isAdding}
+          onClick={onBuy}
           className="h-[60px] w-[196px] rounded-[40px] bg-linear-to-br from-primary to-primary/80 text-base font-bold text-primary-foreground pressable disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isSoldOut ? 'Esgotado' : 'Comprar NFT'}
         </button>
         <button
           type="button"
-          disabled={isSoldOut}
-          onClick={() => notifyUnavailable('O carrinho')}
+          disabled={isSoldOut || isAdding}
+          onClick={onAddToCart}
           aria-label="Adicionar ao carrinho"
           className="flex size-[60px] items-center justify-center rounded-[40px] border border-border bg-secondary text-accent pressable disabled:cursor-not-allowed disabled:opacity-50"
         >

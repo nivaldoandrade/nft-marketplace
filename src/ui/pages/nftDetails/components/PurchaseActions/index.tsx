@@ -1,6 +1,5 @@
 import { HeartIcon, HeartOutlineIcon } from '@/ui/components/Icons';
-import { QuantityStepper } from '@/ui/pages/nftDetails/components/QuantityStepper';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
+import { QuantityStepper } from '@/ui/components/QuantityStepper';
 
 type PurchaseActionsProps = {
   quantity: number;
@@ -8,6 +7,8 @@ type PurchaseActionsProps = {
   isSoldOut: boolean;
   quantityLimitMessage: string | null;
   isFavorite: boolean;
+  isAdding: boolean;
+  onBuy: () => void;
   onIncrease: () => void;
   onDecrease: () => void;
   onToggleFavorite: () => void;
@@ -19,6 +20,8 @@ export function PurchaseActions({
   isSoldOut,
   quantityLimitMessage,
   isFavorite,
+  isAdding,
+  onBuy,
   onIncrease,
   onDecrease,
   onToggleFavorite,
@@ -36,11 +39,11 @@ export function PurchaseActions({
         <div className="flex gap-2">
           <button
             type="button"
-            disabled={isSoldOut}
-            onClick={() => notifyUnavailable('A compra')}
+            disabled={isSoldOut || isAdding}
+            onClick={onBuy}
             className="h-10 w-[130px] rounded-md bg-primary text-sm font-bold text-primary-foreground pressable hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {isSoldOut ? 'ESGOTADO' : 'COMPRAR'}
+            {isSoldOut ? 'ESGOTADO' : isAdding ? 'ADICIONANDO...' : 'COMPRAR'}
           </button>
           <button
             type="button"

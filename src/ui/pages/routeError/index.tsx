@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { type ErrorComponentProps, Link, useRouter } from '@tanstack/react-router';
 
+import { queryKeys } from '@/app/libs/queryKeys';
 import { Container } from '@/ui/components/Container';
 
 export function RouteError({ reset }: ErrorComponentProps) {
@@ -8,7 +9,9 @@ export function RouteError({ reset }: ErrorComponentProps) {
   const queryClient = useQueryClient();
 
   async function handleRetry() {
-    await queryClient.resetQueries();
+    await queryClient.resetQueries({
+      predicate: (query) => query.queryKey[0] !== queryKeys.session()[0],
+    });
     reset();
     router.invalidate();
   }

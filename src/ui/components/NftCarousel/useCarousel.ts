@@ -13,7 +13,10 @@ export function useCarousel(itemsCount: number) {
     }
 
     const observer = new ResizeObserver(() => {
-      setPageCount(Math.max(1, Math.round(track.scrollWidth / track.clientWidth)));
+      // the track can briefly measure 0px wide while the viewport is resized
+      if (track.clientWidth > 0) {
+        setPageCount(Math.max(1, Math.round(track.scrollWidth / track.clientWidth)));
+      }
     });
 
     observer.observe(track);
