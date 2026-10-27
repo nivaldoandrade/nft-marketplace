@@ -12,10 +12,17 @@ export const queryKeys = {
     reviews: (nftId: string) => ['nfts', 'detail', nftId, 'reviews'] as const,
   },
 
+  guest: {
+    cart: () => ['guest', 'cart'] as const,
+    quotes: () => ['guest', 'quote'] as const,
+    quote: (params: object) => ['guest', 'quote', params] as const,
+  },
+
   user: (userId: string) => ({
     all: () => ['user', userId] as const,
     favorites: () => ['user', userId, 'favorites'] as const,
     cart: () => ['user', userId, 'cart'] as const,
+    quotes: () => ['user', userId, 'quote'] as const,
     quote: (params: object) => ['user', userId, 'quote', params] as const,
     orders: {
       all: () => ['user', userId, 'orders'] as const,

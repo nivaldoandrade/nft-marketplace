@@ -43,6 +43,15 @@ export abstract class Service {
     delete this.client.defaults.headers.common['Authorization'];
   }
 
+  static setGuestCartId(guestCartId: string | null) {
+    if (guestCartId) {
+      this.client.defaults.headers.common['X-Guest-Cart-Id'] = guestCartId;
+      return;
+    }
+
+    delete this.client.defaults.headers.common['X-Guest-Cart-Id'];
+  }
+
   static removeInterceptor() {
     if (this.interceptorId === undefined) {
       return;

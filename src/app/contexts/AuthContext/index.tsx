@@ -3,9 +3,11 @@ import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import { ErrorCode, getApiErrorCode } from '@/app/errors/apiErrors';
 import { useSession } from '@/app/hooks/queries/session/useSession';
 import { AuthTokenManager } from '@/app/libs/AuthTokenManager';
+import { GuestCartManager } from '@/app/libs/GuestCartManager';
 import { queryClient } from '@/app/libs/queryClient';
 import { queryKeys } from '@/app/libs/queryKeys';
 import { AuthService } from '@/app/services/AuthService';
+import { CartService } from '@/app/services/CartService';
 import { Service } from '@/app/services/Service';
 import type { User } from '@/app/types/User';
 
@@ -28,7 +30,11 @@ interface IAuthProviderProps {
 }
 
 export function AuthProvider({ onSessionExpired, children }: IAuthProviderProps) {
-  const [hasStoredToken] = useState(() => !!AuthTokenManager.get());
+  const [hasStoredToken] = useState(() => {
+    Service.setGuestCartId(GuestCartManager.get());
+
+    return !!AuthTokenManager.get();
+  });
   const { user, expiresAt, isFetched, loadSession } = useSession();
   const isReady = !hasStoredToken || isFetched;
 
@@ -53,28 +59,48 @@ export function AuthProvider({ onSessionExpired, children }: IAuthProviderProps)
     [clearSession, onSessionExpired],
   );
 
+  const mergeGuestCart = useCallback(async (userId: string) => {
+    const guestCartId = GuestCartManager.get();
+
+    if (!guestCartId) {
+      return;
+    }
+
+    try {
+      const cart = await CartService.merge(guestCartId);
+      queryClient.setQueryData(queryKeys.user(userId).cart(), cart);
+      queryClient.removeQueries({ queryKey: queryKeys.guest.cart() });
+      queryClient.removeQueries({ queryKey: queryKeys.guest.quotes() });
+      GuestCartManager.remove();
+      Service.setGuestCartId(null);
+    } catch {
+      // keeps the guest cart to retry on the next sign in
+    }
+  }, []);
+
   const startSession = useCallback(
-    (response: AuthService.AuthResponse) => {
+    async (response: AuthService.AuthResponse) => {
       AuthTokenManager.save(response.accessToken);
       setupAuth(response.accessToken);
+      await mergeGuestCart(response.user.id);
       queryClient.setQueryData<AuthService.Session>(queryKeys.session(), {
         user: response.user,
         expiresAt: response.expiresAt,
       });
     },
-    [setupAuth],
+    [mergeGuestCart, setupAuth],
   );
 
   const signIn = useCallback(
     async (params: AuthService.SignIn['params']) => {
-      startSession(await AuthService.signIn(params));
+      await startSession(await AuthService.signIn(params));
     },
     [startSession],
   );
 
   const signUp = useCallback(
     async (params: AuthService.SignUp['params']) => {
-      startSession(await AuthService.signUp(params));
+      await startSession(await AuthService.signUp(params));
     },
     [startSession],
   );
