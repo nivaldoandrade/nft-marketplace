@@ -19,6 +19,7 @@ export function PageLink({ page, label, isCurrent = false, children }: PageLinkP
         to="."
         search={(previous) => ({ ...previous, page })}
         resetScroll={false}
+        activeOptions={{ exact: true }}
         onClick={scrollToCatalog}
         aria-label={label}
         aria-current={isCurrent ? 'page' : undefined}

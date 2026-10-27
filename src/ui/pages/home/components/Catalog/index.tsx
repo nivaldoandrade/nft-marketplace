@@ -1,4 +1,5 @@
 import { Container } from '@/ui/components/Container';
+import { useOutOfRangePage } from '@/ui/pages/home/components/Catalog/useOutOfRangePage';
 import { CatalogFilters } from '@/ui/pages/home/components/CatalogFilters';
 import { CatalogPagination } from '@/ui/pages/home/components/CatalogPagination';
 import { CatalogToolbar } from '@/ui/pages/home/components/CatalogToolbar';
@@ -7,6 +8,8 @@ import { Spotlight } from '@/ui/pages/home/components/Spotlight';
 import { CATALOG_SECTION_ID } from '@/ui/utils/sections';
 
 export function Catalog() {
+  useOutOfRangePage();
+
   return (
     <section
       id={CATALOG_SECTION_ID}
