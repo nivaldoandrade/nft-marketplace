@@ -5,7 +5,7 @@ import { useAuth } from '@/app/contexts/AuthContext/useAuth';
 import { AuthTokenManager } from '@/app/libs/AuthTokenManager';
 import { EventTracker } from '@/app/realtime/EventTracker';
 import { RealtimeStatus } from '@/app/realtime/RealtimeStatus';
-import { createSocket } from '@/app/realtime/socket';
+import { createSocket, type RealtimeSocket } from '@/app/realtime/socket';
 import { applyNftUpdated, reconcileNfts } from '@/app/realtime/syncNfts';
 import { applyOrderUpdated, reconcileOrders } from '@/app/realtime/syncOrders';
 import type { NftUpdatedEvent, OrderUpdatedEvent } from '@/app/types/Realtime';
@@ -30,7 +30,8 @@ export function RealtimeProvider({ children }: IRealtimeProviderProps) {
 
   // one connection per session, so events from a previous user never reach the next one
   useEffect(() => {
-    const socket = createSocket(userId ? AuthTokenManager.get() : null);
+    let socket: RealtimeSocket | null = null;
+    let isActive = true;
     let hasConnected = false;
 
     function handleConnect() {
@@ -57,22 +58,30 @@ export function RealtimeProvider({ children }: IRealtimeProviderProps) {
       }
     }
 
-    socket.on('connect', handleConnect);
-    socket.on('disconnect', handleConnectionLost);
-    socket.on('connect_error', handleConnectionLost);
     function handleOrderUpdated(event: OrderUpdatedEvent) {
       if (userId && tracker.accept(event)) {
         applyOrderUpdated(queryClient, userId, event);
       }
     }
 
-    socket.on('nft.updated', handleNftUpdated);
-    socket.on('order.updated', handleOrderUpdated);
-    socket.connect();
+    createSocket(userId ? AuthTokenManager.get() : null).then((created) => {
+      if (!isActive) {
+        return;
+      }
+
+      socket = created;
+      socket.on('connect', handleConnect);
+      socket.on('disconnect', handleConnectionLost);
+      socket.on('connect_error', handleConnectionLost);
+      socket.on('nft.updated', handleNftUpdated);
+      socket.on('order.updated', handleOrderUpdated);
+      socket.connect();
+    });
 
     return () => {
-      socket.off();
-      socket.disconnect();
+      isActive = false;
+      socket?.off();
+      socket?.disconnect();
     };
   }, [queryClient, tracker, userId]);
 

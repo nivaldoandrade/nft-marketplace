@@ -7,6 +7,8 @@ import { cn } from '@/ui/utils/cn';
 const gridClassName =
   'grid grid-cols-2 gap-x-4 gap-y-6 pb-8 max-md:[&>*:nth-child(even)]:translate-y-8 md:grid-cols-3 md:gap-x-6 md:gap-y-12 md:pb-0 xl:gap-x-[34px] xl:gap-y-[72px]';
 
+// the first row on desktop and the first two rows on mobile are visible without scrolling
+const PRIORITY_CARDS = 4;
 export function NftGrid() {
   const {
     nfts,
@@ -97,7 +99,7 @@ export function NftGrid() {
         )}
       >
         {nfts.map((nft, index) => (
-          <NftCard key={nft.id} nft={nft} priority={index < 2} />
+          <NftCard key={nft.id} nft={nft} priority={index < PRIORITY_CARDS} />
         ))}
       </div>
     </div>

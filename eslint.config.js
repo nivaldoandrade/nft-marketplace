@@ -113,7 +113,7 @@ export default tseslint.config(
     rules: { ...playwright.configs['flat/recommended'].rules, 'react-hooks/rules-of-hooks': 'off' },
   },
   {
-    files: ['*.config.{js,ts}'],
+    files: ['*.config.{js,ts}', 'lighthouse/**/*.mjs'],
     languageOptions: {
       globals: globals.node,
     },
