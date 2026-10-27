@@ -8,6 +8,7 @@ import { nftHandlers } from '@/mocks/handlers/nfts';
 import { orderHandlers } from '@/mocks/handlers/orders';
 import { profileHandlers } from '@/mocks/handlers/profile';
 import { realtimeHandlers } from '@/mocks/handlers/realtime';
+import { scenarioHandlers } from '@/mocks/handlers/scenario';
 import { walletHandlers } from '@/mocks/handlers/wallets';
 import { applyNetworkConditions } from '@/mocks/scenarios/network';
 
@@ -23,4 +24,5 @@ export const handlers = [
   ...profileHandlers,
   ...walletHandlers,
   ...realtimeHandlers,
+  ...scenarioHandlers,
 ];

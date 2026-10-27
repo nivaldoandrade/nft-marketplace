@@ -105,7 +105,17 @@ function readInitialScenarioIds(): string[] {
   return (localStorage.getItem(MOCK_SCENARIO_KEY) ?? 'default').split(',');
 }
 
-const activeIds = readInitialScenarioIds();
+let activeIds = readInitialScenarioIds();
+
+// switches the scenario without reloading, kept in the browser like ?scenario=
+export function setActiveScenario(value: string) {
+  localStorage.setItem(MOCK_SCENARIO_KEY, value);
+  activeIds = value.split(',');
+}
+
+export function isKnownScenario(value: string) {
+  return value.split(',').every((id) => scenarios.some((scenario) => scenario.id === id));
+}
 
 export function getScenarioConfig(): ScenarioConfig {
   return activeIds.reduce<ScenarioConfig>(

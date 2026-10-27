@@ -29,6 +29,7 @@ export function useOrder(orderId: string) {
     isPending,
     isError,
     isNotFound: getApiErrorCode(error) === ErrorCode.RESOURCE_NOT_FOUND,
+    isForbidden: getApiErrorCode(error) === ErrorCode.FORBIDDEN,
     refetch,
   };
 }

@@ -15,7 +15,7 @@ export const explorerNames: Record<Network, string> = {
 
 export function useOrderConfirmation() {
   const { orderId } = route.useParams();
-  const { order, isPending, isError, isNotFound, refetch } = useOrder(orderId);
+  const { order, isPending, isError, isNotFound, isForbidden, refetch } = useOrder(orderId);
 
   useValueChange(order?.status, (previous, current) => {
     if (previous === 'pending' && current === 'confirmed') {
@@ -35,5 +35,5 @@ export function useOrderConfirmation() {
     }
   }
 
-  return { order, isPending, isError, isNotFound, refetch, handleOpenExplorer };
+  return { order, isPending, isError, isNotFound, isForbidden, refetch, handleOpenExplorer };
 }

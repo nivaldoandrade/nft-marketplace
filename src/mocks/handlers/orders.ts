@@ -213,9 +213,12 @@ export const orderHandlers = [
 
     const record = db.orders[params.orderId as string];
 
-    // another user's order is reported as missing, so its existence does not leak
-    if (!record || record.userId !== auth.user.id) {
+    if (!record) {
       return apiError(404, 'RESOURCE_NOT_FOUND');
+    }
+
+    if (record.userId !== auth.user.id) {
+      return apiError(403, 'FORBIDDEN');
     }
 
     return HttpResponse.json(record.order);

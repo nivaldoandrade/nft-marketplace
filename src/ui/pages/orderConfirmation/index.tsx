@@ -23,7 +23,7 @@ const secondaryButtonClassName =
   'flex h-12 items-center justify-center rounded-[5px] border border-border px-4 text-base font-bold hover:border-primary';
 
 export function OrderConfirmation() {
-  const { order, isPending, isError, isNotFound, refetch, handleOpenExplorer } =
+  const { order, isPending, isError, isNotFound, isForbidden, refetch, handleOpenExplorer } =
     useOrderConfirmation();
 
   return (
@@ -43,6 +43,11 @@ export function OrderConfirmation() {
           <Feedback
             title="Pedido não encontrado"
             description="Confira o link ou acompanhe seus pedidos pelo perfil."
+          />
+        ) : isForbidden ? (
+          <Feedback
+            title="Você não tem permissão para ver este pedido"
+            description="Este pedido pertence a outra conta. Entre com a conta que fez a compra."
           />
         ) : isError ? (
           <Feedback title="Não foi possível carregar o pedido" onRetry={() => refetch()} />
