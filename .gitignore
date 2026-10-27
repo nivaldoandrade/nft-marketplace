@@ -28,3 +28,4 @@ lighthouse/.tmp
 *.njsproj
 *.sln
 *.sw?
+.vercel
