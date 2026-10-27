@@ -33,6 +33,7 @@ export function Header() {
     handleClearSearch,
     isSignedIn,
     initials,
+    avatarUrl,
     firstName,
     openAuthModal,
     cartCount,
@@ -167,8 +168,12 @@ export function Header() {
                   aria-label={`Conta de ${firstName}`}
                   className="flex h-[35px] shrink-0 items-center gap-1.5 rounded-full pressable hover:text-accent"
                 >
-                  <span className="flex size-[35px] shrink-0 items-center justify-center rounded-full border border-primary bg-secondary text-sm font-bold text-accent">
-                    {initials}
+                  <span className="flex size-[35px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-primary bg-secondary text-sm font-bold text-accent">
+                    {avatarUrl ? (
+                      <img src={avatarUrl} alt="" className="size-full object-cover" />
+                    ) : (
+                      initials
+                    )}
                   </span>
                   <ArrowDownIcon className="size-3 shrink-0" />
                 </button>

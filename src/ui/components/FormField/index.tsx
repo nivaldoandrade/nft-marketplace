@@ -2,7 +2,7 @@ import { useId } from 'react';
 
 import { cn } from '@/ui/utils/cn';
 
-type CheckoutFieldProps = {
+type FormFieldProps = {
   label: string;
   isRequired?: boolean;
   isLabelHidden?: boolean;
@@ -15,17 +15,14 @@ type CheckoutFieldProps = {
   }) => React.ReactNode;
 };
 
-export const checkoutInputClassName =
-  'h-10 w-full rounded-[3px] border border-border bg-transparent px-3 text-sm text-foreground placeholder:text-subtle focus-visible:border-primary focus-visible:outline-none aria-invalid:border-coral';
-
-export function CheckoutField({
+export function FormField({
   label,
   isRequired = false,
   isLabelHidden = false,
   error,
   className,
   children,
-}: CheckoutFieldProps) {
+}: FormFieldProps) {
   const id = useId();
   const errorId = `${id}-error`;
 

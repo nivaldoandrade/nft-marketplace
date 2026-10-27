@@ -17,11 +17,24 @@ import { cn } from '@/ui/utils/cn';
 const itemClassName =
   'flex h-[45px] w-full items-center gap-3 border-l-4 border-transparent px-4 text-[15px] text-accent transition-colors hover:bg-secondary';
 
-const unavailableItems = [
-  { label: 'Dados do perfil', feature: 'A página de dados do perfil', icon: UserOutlineIcon },
-  { label: 'Carteiras', feature: 'A página de carteiras', icon: LocationIcon },
-  { label: 'Atividade', feature: 'A página de atividade', icon: CartIcon },
-];
+const activeClassName =
+  'data-[status=active]:border-primary data-[status=active]:[&_svg]:text-primary';
+
+const accountLinks = [
+  {
+    label: 'Dados do perfil',
+    to: '/perfil/dados',
+    icon: UserOutlineIcon,
+    iconClassName: 'size-[18px]',
+  },
+  { label: 'Carteiras', to: '/perfil/carteiras', icon: LocationIcon, iconClassName: 'size-5' },
+] as const;
+
+const mobileLinks = [
+  { label: 'Dados', to: '/perfil/dados' },
+  { label: 'Carteiras', to: '/perfil/carteiras' },
+  { label: 'Lista de interesse', to: '/perfil/lista-de-interesse' },
+] as const;
 
 const outOfScopeItems = [
   { label: 'Ofertas', feature: 'A página de ofertas', icon: ActivityIcon },
@@ -40,26 +53,26 @@ export function ProfileLayout() {
             Meu perfil
           </h2>
           <ul>
-            {unavailableItems.map(({ label, feature, icon: Icon }) => (
-              <li key={label}>
-                <button
-                  type="button"
-                  onClick={() => handleUnavailable(feature)}
-                  className={itemClassName}
-                >
-                  <Icon className="size-[18px] shrink-0 text-subtle" />
+            {accountLinks.map(({ label, to, icon: Icon, iconClassName }) => (
+              <li key={to}>
+                <Link to={to} className={cn(itemClassName, activeClassName)}>
+                  <Icon className={cn(iconClassName, 'shrink-0 text-subtle')} />
                   {label}
-                </button>
+                </Link>
               </li>
             ))}
             <li>
-              <Link
-                to="/perfil/lista-de-interesse"
-                className={cn(
-                  itemClassName,
-                  'data-[status=active]:border-primary data-[status=active]:[&_svg]:text-primary',
-                )}
+              <button
+                type="button"
+                onClick={() => handleUnavailable('A página de atividade')}
+                className={itemClassName}
               >
+                <CartIcon className="size-[18px] shrink-0 text-subtle" />
+                Atividade
+              </button>
+            </li>
+            <li>
+              <Link to="/perfil/lista-de-interesse" className={cn(itemClassName, activeClassName)}>
                 <HeartOutlineIcon className="size-4 shrink-0 text-subtle" />
                 Lista de interesse
               </Link>
@@ -90,7 +103,21 @@ export function ProfileLayout() {
         </nav>
       </aside>
 
-      <div className="min-w-0 flex-1">
+      <div className="flex min-w-0 flex-1 flex-col gap-6">
+        <nav aria-label="Meu perfil" className="-mx-4 overflow-x-auto px-4 lg:hidden">
+          <ul className="flex gap-2">
+            {mobileLinks.map(({ label, to }) => (
+              <li key={to} className="shrink-0">
+                <Link
+                  to={to}
+                  className="flex h-9 items-center rounded-full border border-border px-4 text-sm text-muted-foreground transition-colors hover:text-accent data-[status=active]:border-primary data-[status=active]:bg-secondary data-[status=active]:font-bold data-[status=active]:text-accent"
+                >
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
         <Outlet />
       </div>
     </Container>

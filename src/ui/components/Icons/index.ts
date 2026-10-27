@@ -15,6 +15,7 @@ export { GoogleIcon } from './GoogleIcon';
 export { HeartIcon } from './HeartIcon';
 export { HeartOutlineIcon } from './HeartOutlineIcon';
 export { HomeIcon } from './HomeIcon';
+export { ImageIcon } from './ImageIcon';
 export { InstagramIcon } from './InstagramIcon';
 export { LinkedinIcon } from './LinkedinIcon';
 export { LocationIcon } from './LocationIcon';

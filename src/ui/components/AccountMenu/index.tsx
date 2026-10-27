@@ -16,7 +16,7 @@ type AccountMenuProps = {
 };
 
 export function AccountMenu({ side = 'bottom', children }: AccountMenuProps) {
-  const { user, handleSignOut, handleUnavailable } = useAccountMenu();
+  const { user, handleSignOut } = useAccountMenu();
 
   if (!user) {
     return null;
@@ -31,11 +31,11 @@ export function AccountMenu({ side = 'bottom', children }: AccountMenuProps) {
           <span className="text-xs text-muted-foreground">{user.email}</span>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => handleUnavailable('O perfil')}>
-          Meu perfil
+        <DropdownMenuItem asChild>
+          <Link to="/perfil/dados">Meu perfil</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => handleUnavailable('A página de carteiras')}>
-          Minhas carteiras
+        <DropdownMenuItem asChild>
+          <Link to="/perfil/carteiras">Minhas carteiras</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link to="/perfil/lista-de-interesse">Lista de interesse</Link>

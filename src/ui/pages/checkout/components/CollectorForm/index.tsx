@@ -2,6 +2,13 @@ import { Controller, type Control, type FieldErrors, type UseFormRegister } from
 
 import { Network } from '@/app/types/Nft';
 import { WalletProvider } from '@/app/types/Wallet';
+import { EnsDomainSelect } from '@/ui/components/EnsDomainSelect';
+import { FormField } from '@/ui/components/FormField';
+import {
+  fieldInputClassName,
+  fieldSelectContentClassName,
+  fieldSelectTriggerClassName,
+} from '@/ui/components/FormField/styles';
 import {
   Select,
   SelectContent,
@@ -9,10 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/ui/components/ui/select';
-import {
-  CheckoutField,
-  checkoutInputClassName,
-} from '@/ui/pages/checkout/components/CheckoutField';
 import type { CheckoutSchema } from '@/ui/pages/checkout/schema';
 import { cn } from '@/ui/utils/cn';
 import { networkLabels, walletProviderLabels } from '@/ui/utils/labels';
@@ -25,13 +28,6 @@ type CollectorFormProps = {
   isUsingSecondary: boolean;
   onToggleSecondary: (isUsingSecondary: boolean) => void;
 };
-
-const selectTriggerClassName = cn(
-  checkoutInputClassName,
-  'h-10 justify-between rounded-[3px] py-0 pr-2 shadow-none data-[placeholder]:text-subtle data-[size=default]:h-10 dark:bg-transparent dark:hover:bg-transparent [&_svg]:size-[18px] [&_svg]:text-foreground',
-);
-
-const selectContentClassName = 'border-border bg-card font-sans';
 
 export function CollectorForm({
   register,
@@ -49,28 +45,28 @@ export function CollectorForm({
 
       <div className="flex flex-col gap-6">
         <div className="grid gap-x-6 gap-y-3 lg:grid-cols-2">
-          <CheckoutField label="Nome de exibição" isRequired error={errors.displayName?.message}>
+          <FormField label="Nome de exibição" isRequired error={errors.displayName?.message}>
             {(props) => (
               <input
                 {...props}
                 {...register('displayName')}
                 autoComplete="name"
-                className={checkoutInputClassName}
+                className={fieldInputClassName}
               />
             )}
-          </CheckoutField>
-          <CheckoutField label="Nome de usuário" isRequired error={errors.username?.message}>
+          </FormField>
+          <FormField label="Nome de usuário" isRequired error={errors.username?.message}>
             {(props) => (
               <input
                 {...props}
                 {...register('username')}
                 autoComplete="username"
-                className={checkoutInputClassName}
+                className={fieldInputClassName}
               />
             )}
-          </CheckoutField>
+          </FormField>
 
-          <CheckoutField label="Rede" isRequired error={errors.network?.message}>
+          <FormField label="Rede" isRequired error={errors.network?.message}>
             {(props) => (
               <Controller
                 control={control}
@@ -80,11 +76,11 @@ export function CollectorForm({
                     <SelectTrigger
                       {...props}
                       onBlur={field.onBlur}
-                      className={selectTriggerClassName}
+                      className={fieldSelectTriggerClassName}
                     >
                       <SelectValue placeholder="Selecione uma rede" />
                     </SelectTrigger>
-                    <SelectContent position="popper" className={selectContentClassName}>
+                    <SelectContent position="popper" className={fieldSelectContentClassName}>
                       {Object.values(Network).map((network) => (
                         <SelectItem key={network} value={network}>
                           {networkLabels[network]}
@@ -95,29 +91,25 @@ export function CollectorForm({
                 )}
               />
             )}
-          </CheckoutField>
-          <CheckoutField label="Nome do perfil" isRequired error={errors.profileName?.message}>
+          </FormField>
+          <FormField label="Nome do perfil" isRequired error={errors.profileName?.message}>
             {(props) => (
-              <input {...props} {...register('profileName')} className={checkoutInputClassName} />
+              <input {...props} {...register('profileName')} className={fieldInputClassName} />
             )}
-          </CheckoutField>
+          </FormField>
 
-          <CheckoutField
-            label="Endereço da carteira"
-            isRequired
-            error={errors.walletAddress?.message}
-          >
+          <FormField label="Endereço da carteira" isRequired error={errors.walletAddress?.message}>
             {(props) => (
               <input
                 {...props}
                 {...register('walletAddress')}
                 placeholder="Endereço 0x da carteira"
                 spellCheck={false}
-                className={cn(checkoutInputClassName, 'font-mono')}
+                className={cn(fieldInputClassName, 'font-mono')}
               />
             )}
-          </CheckoutField>
-          <CheckoutField
+          </FormField>
+          <FormField
             label="ENS ou carteira secundária (opcional)"
             isLabelHidden
             error={errors.secondaryAddress?.message}
@@ -129,12 +121,12 @@ export function CollectorForm({
                 {...register('secondaryAddress')}
                 placeholder="ENS ou carteira secundária (opcional)"
                 spellCheck={false}
-                className={checkoutInputClassName}
+                className={fieldInputClassName}
               />
             )}
-          </CheckoutField>
+          </FormField>
 
-          <CheckoutField label="Tipo de carteira" isRequired error={errors.provider?.message}>
+          <FormField label="Tipo de carteira" isRequired error={errors.provider?.message}>
             {(props) => (
               <Controller
                 control={control}
@@ -144,11 +136,11 @@ export function CollectorForm({
                     <SelectTrigger
                       {...props}
                       onBlur={field.onBlur}
-                      className={selectTriggerClassName}
+                      className={fieldSelectTriggerClassName}
                     >
                       <SelectValue placeholder="Selecione uma carteira" />
                     </SelectTrigger>
-                    <SelectContent position="popper" className={selectContentClassName}>
+                    <SelectContent position="popper" className={fieldSelectContentClassName}>
                       {Object.values(WalletProvider).map((provider) => (
                         <SelectItem key={provider} value={provider}>
                           {walletProviderLabels[provider]}
@@ -159,43 +151,37 @@ export function CollectorForm({
                 )}
               />
             )}
-          </CheckoutField>
-          <CheckoutField
-            label="Código de indicação"
-            isRequired
-            error={errors.referralCode?.message}
-          >
+          </FormField>
+          <FormField label="Código de indicação" isRequired error={errors.referralCode?.message}>
             {(props) => (
-              <input {...props} {...register('referralCode')} className={checkoutInputClassName} />
+              <input {...props} {...register('referralCode')} className={fieldInputClassName} />
             )}
-          </CheckoutField>
+          </FormField>
 
-          <CheckoutField label="E-mail" isRequired error={errors.email?.message}>
+          <FormField label="E-mail" isRequired error={errors.email?.message}>
             {(props) => (
               <input
                 {...props}
                 {...register('email')}
                 type="email"
                 autoComplete="email"
-                className={checkoutInputClassName}
+                className={fieldInputClassName}
               />
             )}
-          </CheckoutField>
-          <CheckoutField label="Nome ENS" isRequired error={errors.ensName?.message}>
+          </FormField>
+          <FormField label="Nome ENS" isRequired error={errors.ensName?.message}>
             {(props) => (
               <div className="flex gap-2.5">
+                <EnsDomainSelect />
                 <input
                   {...props}
                   {...register('ensName')}
                   spellCheck={false}
-                  className={cn(checkoutInputClassName, 'min-w-0 flex-1')}
+                  className={cn(fieldInputClassName, 'min-w-0 flex-1')}
                 />
-                <span className="flex h-10 shrink-0 items-center rounded-[3px] border border-border px-2.5 text-[15px]">
-                  .eth
-                </span>
               </div>
             )}
-          </CheckoutField>
+          </FormField>
         </div>
 
         <label
@@ -220,7 +206,7 @@ export function CollectorForm({
           </p>
         )}
 
-        <CheckoutField
+        <FormField
           label="Observação do colecionador (opcional)"
           error={errors.note?.message}
           className="gap-3 lg:max-w-[350px]"
@@ -230,10 +216,10 @@ export function CollectorForm({
               {...props}
               {...register('note')}
               rows={6}
-              className={cn(checkoutInputClassName, 'h-[152px] resize-none py-2')}
+              className={cn(fieldInputClassName, 'h-[152px] resize-none py-2')}
             />
           )}
-        </CheckoutField>
+        </FormField>
       </div>
     </section>
   );

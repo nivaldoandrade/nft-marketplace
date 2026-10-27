@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import type { Wallet } from '@/app/types/Wallet';
 import {
   DropdownMenu,
@@ -9,7 +11,6 @@ import { radioClassName } from '@/ui/pages/checkout/components/ProviderOptions';
 import { cn } from '@/ui/utils/cn';
 import { formatAddress } from '@/ui/utils/formatAddress';
 import { networkLabels } from '@/ui/utils/labels';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
 type WalletCardsProps = {
   wallets: Wallet[];
@@ -67,8 +68,8 @@ export function WalletCards({ wallets, selectedId, onSelect }: WalletCardsProps)
               </span>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="border-border bg-card font-sans">
-              <DropdownMenuItem onSelect={() => notifyUnavailable('A edição de carteiras')}>
-                Editar carteira
+              <DropdownMenuItem asChild>
+                <Link to="/perfil/carteiras">Editar carteira</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

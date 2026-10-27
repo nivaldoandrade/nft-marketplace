@@ -1,5 +1,5 @@
 import { useIsMutating, useMutationState } from '@tanstack/react-query';
-import { Navigate, useCanGoBack, useRouter } from '@tanstack/react-router';
+import { Link, Navigate, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { useState } from 'react';
 
 import { useAuth } from '@/app/contexts/AuthContext/useAuth';
@@ -23,7 +23,6 @@ import { useCheckout } from '@/ui/pages/checkout/useCheckout';
 import { cn } from '@/ui/utils/cn';
 import { formatPrice } from '@/ui/utils/formatPrice';
 import { walletProviderLabels } from '@/ui/utils/labels';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
 export function Checkout() {
   const router = useRouter();
@@ -96,13 +95,12 @@ export function Checkout() {
           <p className="max-w-md text-sm leading-6 text-muted-foreground">
             As compras são pagas e recebidas pelas carteiras cadastradas no seu perfil.
           </p>
-          <button
-            type="button"
-            onClick={() => notifyUnavailable('O cadastro de carteiras')}
+          <Link
+            to="/perfil/carteiras"
             className="mt-2 rounded-md bg-primary px-6 py-2.5 font-bold text-primary-foreground pressable hover:bg-accent"
           >
             Cadastrar carteira
-          </button>
+          </Link>
         </div>
       ) : (
         <CheckoutContent user={user} wallets={wallets.wallets} connection={wallets.connection} />

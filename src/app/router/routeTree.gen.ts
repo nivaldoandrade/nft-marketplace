@@ -18,6 +18,8 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as NftNftIdRouteImport } from './routes/nft.$nftId'
 import { Route as PedidosOrderIdRouteImport } from './routes/pedidos.$orderId'
 import { Route as PerfilIndexRouteImport } from './routes/perfil.index'
+import { Route as PerfilCarteirasRouteImport } from './routes/perfil.carteiras'
+import { Route as PerfilDadosRouteImport } from './routes/perfil.dados'
 import { Route as PerfilListaDeInteresseRouteImport } from './routes/perfil.lista-de-interesse'
 
 const IndexRoute = IndexRouteImport.update({
@@ -65,6 +67,16 @@ const PerfilIndexRoute = PerfilIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PerfilRoute,
 } as any)
+const PerfilCarteirasRoute = PerfilCarteirasRouteImport.update({
+  id: '/carteiras',
+  path: '/carteiras',
+  getParentRoute: () => PerfilRoute,
+} as any)
+const PerfilDadosRoute = PerfilDadosRouteImport.update({
+  id: '/dados',
+  path: '/dados',
+  getParentRoute: () => PerfilRoute,
+} as any)
 const PerfilListaDeInteresseRoute = PerfilListaDeInteresseRouteImport.update({
   id: '/lista-de-interesse',
   path: '/lista-de-interesse',
@@ -80,6 +92,8 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRouteWithChildren
   '/nft/$nftId': typeof NftNftIdRoute
   '/pedidos/$orderId': typeof PedidosOrderIdRoute
+  '/perfil/carteiras': typeof PerfilCarteirasRoute
+  '/perfil/dados': typeof PerfilDadosRoute
   '/perfil/lista-de-interesse': typeof PerfilListaDeInteresseRoute
   '/perfil/': typeof PerfilIndexRoute
 }
@@ -91,6 +105,8 @@ export interface FileRoutesByTo {
   '/pagamento': typeof PagamentoRoute
   '/nft/$nftId': typeof NftNftIdRoute
   '/pedidos/$orderId': typeof PedidosOrderIdRoute
+  '/perfil/carteiras': typeof PerfilCarteirasRoute
+  '/perfil/dados': typeof PerfilDadosRoute
   '/perfil/lista-de-interesse': typeof PerfilListaDeInteresseRoute
   '/perfil': typeof PerfilIndexRoute
 }
@@ -104,6 +120,8 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRouteWithChildren
   '/nft/$nftId': typeof NftNftIdRoute
   '/pedidos/$orderId': typeof PedidosOrderIdRoute
+  '/perfil/carteiras': typeof PerfilCarteirasRoute
+  '/perfil/dados': typeof PerfilDadosRoute
   '/perfil/lista-de-interesse': typeof PerfilListaDeInteresseRoute
   '/perfil/': typeof PerfilIndexRoute
 }
@@ -118,6 +136,8 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/nft/$nftId'
     | '/pedidos/$orderId'
+    | '/perfil/carteiras'
+    | '/perfil/dados'
     | '/perfil/lista-de-interesse'
     | '/perfil/'
   fileRoutesByTo: FileRoutesByTo
@@ -129,6 +149,8 @@ export interface FileRouteTypes {
     | '/pagamento'
     | '/nft/$nftId'
     | '/pedidos/$orderId'
+    | '/perfil/carteiras'
+    | '/perfil/dados'
     | '/perfil/lista-de-interesse'
     | '/perfil'
   id:
@@ -141,6 +163,8 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/nft/$nftId'
     | '/pedidos/$orderId'
+    | '/perfil/carteiras'
+    | '/perfil/dados'
     | '/perfil/lista-de-interesse'
     | '/perfil/'
   fileRoutesById: FileRoutesById
@@ -221,6 +245,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PerfilIndexRouteImport
       parentRoute: typeof PerfilRoute
     }
+    '/perfil/carteiras': {
+      id: '/perfil/carteiras'
+      path: '/carteiras'
+      fullPath: '/perfil/carteiras'
+      preLoaderRoute: typeof PerfilCarteirasRouteImport
+      parentRoute: typeof PerfilRoute
+    }
+    '/perfil/dados': {
+      id: '/perfil/dados'
+      path: '/dados'
+      fullPath: '/perfil/dados'
+      preLoaderRoute: typeof PerfilDadosRouteImport
+      parentRoute: typeof PerfilRoute
+    }
     '/perfil/lista-de-interesse': {
       id: '/perfil/lista-de-interesse'
       path: '/lista-de-interesse'
@@ -232,11 +270,15 @@ declare module '@tanstack/react-router' {
 }
 
 interface PerfilRouteChildren {
+  PerfilCarteirasRoute: typeof PerfilCarteirasRoute
+  PerfilDadosRoute: typeof PerfilDadosRoute
   PerfilListaDeInteresseRoute: typeof PerfilListaDeInteresseRoute
   PerfilIndexRoute: typeof PerfilIndexRoute
 }
 
 const PerfilRouteChildren: PerfilRouteChildren = {
+  PerfilCarteirasRoute: PerfilCarteirasRoute,
+  PerfilDadosRoute: PerfilDadosRoute,
   PerfilListaDeInteresseRoute: PerfilListaDeInteresseRoute,
   PerfilIndexRoute: PerfilIndexRoute,
 }

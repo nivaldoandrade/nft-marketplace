@@ -147,6 +147,7 @@ export function useHeader() {
     handleClearSearch,
     isSignedIn,
     initials: user ? getInitials(user.displayName) : '',
+    avatarUrl: user?.avatarUrl ?? null,
     firstName: user ? getFirstName(user.displayName) : '',
     openAuthModal,
     cartCount,
