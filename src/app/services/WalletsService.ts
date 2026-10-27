@@ -1,5 +1,5 @@
 import { Service } from '@/app/services/Service';
-import type { WalletProvider, Wallets } from '@/app/types/Wallet';
+import type { Wallet, WalletProvider, Wallets, WalletSlot } from '@/app/types/Wallet';
 
 export class WalletsService extends Service {
   static async list(signal?: AbortSignal): Promise<Wallets> {
@@ -17,6 +17,12 @@ export class WalletsService extends Service {
     return data;
   }
 
+  static async save({ slot, ...body }: WalletsService.SaveParams): Promise<Wallets> {
+    const { data } = await this.client.put<Wallets>(`me/wallets/${slot}`, body);
+
+    return data;
+  }
+
   static async disconnect(): Promise<Wallets> {
     const { data } = await this.client.post<Wallets>('me/wallets/disconnect');
 
@@ -25,6 +31,11 @@ export class WalletsService extends Service {
 }
 
 export namespace WalletsService {
+  export type SaveParams = Partial<Omit<Wallet, 'id' | 'slot' | 'updatedAt'>> & {
+    slot: WalletSlot;
+    sameAsPrimary?: boolean;
+  };
+
   export type ConnectParams = {
     walletId: string;
     provider: WalletProvider;

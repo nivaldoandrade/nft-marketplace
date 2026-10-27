@@ -22,6 +22,16 @@ export function useConnectWallet() {
   return { connectWallet: mutateAsync, isConnecting: isPending };
 }
 
+export function useSaveWallet() {
+  const setWallets = useSetWallets();
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: WalletsService.save.bind(WalletsService),
+    onSuccess: setWallets,
+  });
+
+  return { saveWallet: mutateAsync, isSaving: isPending };
+}
+
 export function useDisconnectWallet() {
   const setWallets = useSetWallets();
   const { mutateAsync, isPending } = useMutation({

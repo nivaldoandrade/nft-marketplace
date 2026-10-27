@@ -14,7 +14,7 @@ import { useCreateOrder } from '@/app/hooks/mutations/orders/useCreateOrder';
 import {
   useConnectWallet,
   useDisconnectWallet,
-} from '@/app/hooks/mutations/wallets/useWalletConnection';
+} from '@/app/hooks/mutations/wallets/useWalletMutations';
 import { useCart } from '@/app/hooks/queries/cart/useCart';
 import { useCartQuote } from '@/app/hooks/queries/cart/useCartQuote';
 import { toast } from '@/app/libs/toast';
