@@ -10,7 +10,7 @@ export function CouponForm() {
         <label htmlFor="coupon-code" className="hidden text-sm leading-4 font-bold md:block">
           Código promocional
         </label>
-        <div className="flex h-[50px] overflow-hidden rounded-[40px] border border-border bg-card shadow-[0_6px_20px_rgba(10,6,4,0.45)] md:h-10 md:rounded-[3px] md:border-primary md:shadow-none">
+        <div className="flex h-[50px] overflow-hidden rounded-[40px] border border-border bg-card shadow-[0_6px_20px_rgba(10,6,4,0.45)] has-[input:focus-visible]:outline-2 has-[input:focus-visible]:outline-offset-2 has-[input:focus-visible]:outline-ring md:h-10 md:rounded-[3px] md:border-primary md:shadow-none">
           <label htmlFor="coupon-code" className="sr-only md:hidden">
             Código promocional
           </label>
@@ -21,13 +21,13 @@ export function CouponForm() {
             placeholder="Digite o código promocional..."
             aria-invalid={!!error}
             aria-describedby={error ? 'coupon-error' : undefined}
-            className="min-w-0 flex-1 bg-transparent pl-4 text-base text-ellipsis uppercase placeholder:text-[13px] placeholder:text-subtle placeholder:normal-case focus-visible:outline-offset-[-2px] md:pl-2 md:text-sm md:placeholder:text-xs"
+            className="min-w-0 flex-1 bg-transparent pl-4 text-base text-ellipsis uppercase placeholder:text-[13px] placeholder:text-subtle placeholder:normal-case focus-visible:outline-none md:pl-2 md:text-sm md:placeholder:text-xs"
             {...register('code')}
           />
           <button
             type="submit"
             disabled={isApplying}
-            className="w-[97px] shrink-0 rounded-[40px] bg-linear-to-br from-primary/55 to-primary text-[15px] font-bold text-foreground pressable disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-primary md:bg-none md:text-primary-foreground md:hover:bg-accent"
+            className="w-[97px] shrink-0 rounded-[40px] bg-linear-to-br from-primary/55 to-primary text-[15px] font-bold text-foreground pressable focus-visible:outline-offset-[-2px] disabled:opacity-60 md:w-[102px] md:rounded-none md:bg-primary md:bg-none md:text-primary-foreground md:hover:bg-accent md:focus-visible:outline-offset-[-4px] md:focus-visible:outline-primary-foreground"
           >
             {isApplying ? 'Aplicando...' : 'Aplicar'}
           </button>

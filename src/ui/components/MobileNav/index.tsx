@@ -36,11 +36,12 @@ export function MobileNav() {
     <>
       <div
         aria-hidden="true"
-        className="fixed inset-x-0 bottom-0 z-30 h-[calc(46px+env(safe-area-inset-bottom))] bg-card shadow-[0_120px_0_120px_var(--card)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 h-[calc(12px+max(34px,env(safe-area-inset-bottom)))] bg-card shadow-[0_120px_0_120px_var(--card)] supports-[-webkit-touch-callout:none]:h-[calc(12px+max(24px,env(safe-area-inset-bottom)))] md:hidden"
       />
+      {/* the 95px Figma bar includes the 34px home indicator area; on iOS the browser toolbar already sits below the bar, so it only keeps 24px when there is no safe area */}
       <nav
         aria-label="Navegação inferior"
-        className="fixed inset-x-0 bottom-0 z-40 pb-[env(safe-area-inset-bottom)] md:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 pb-[max(34px,env(safe-area-inset-bottom))] supports-[-webkit-touch-callout:none]:pb-[max(24px,env(safe-area-inset-bottom))] md:hidden"
       >
         <div
           aria-hidden="true"
@@ -48,7 +49,7 @@ export function MobileNav() {
         >
           <div className="-mr-px flex-1 rounded-tl-[29px] bg-card" />
           <div className="flex w-[152px] shrink-0 flex-col">
-            <svg viewBox="0 0 151.7 94.95" preserveAspectRatio="none" className="h-[95px] w-full">
+            <svg viewBox="0 0 151.7 61" preserveAspectRatio="none" className="h-[61px] w-full">
               <path
                 d="M0 0C13.75 0 25.98 8.2 31.83 20.65C39.59 37.18 56.39 48.62 75.85 48.62C95.31 48.62 112.11 37.17 119.87 20.65C125.72 8.2 137.94 0 151.7 0V94.95H0Z"
                 className="fill-card"
@@ -59,7 +60,7 @@ export function MobileNav() {
           <div className="-ml-px flex-1 rounded-tr-[29px] bg-card" />
         </div>
 
-        <div className="relative h-[95px]">
+        <div className="relative h-[61px]">
           <Link
             to="/"
             aria-label="Início"
@@ -89,7 +90,7 @@ export function MobileNav() {
             type="button"
             onClick={handleSearch}
             aria-label="Buscar NFTs"
-            className="absolute -top-[31px] left-1/2 flex size-[65px] -translate-x-1/2 items-center justify-center rounded-full bg-linear-to-b from-primary/40 to-primary text-foreground pressable"
+            className="absolute -top-[31px] left-1/2 flex size-[65px] -translate-x-1/2 items-center justify-center rounded-full bg-linear-to-b from-primary/40 to-primary text-foreground pressable backdrop-blur-sm"
           >
             <ScanIcon className="h-6 w-[27px]" />
           </button>

@@ -26,7 +26,7 @@ export function SortSelect({ id, className }: SortSelectProps) {
       <Select value={search.sort} onValueChange={(sort) => setFilters({ sort: sort as NftSort })}>
         <SelectTrigger
           id={id}
-          className="h-auto gap-2 border-none bg-transparent p-0 text-[15px] shadow-none data-[size=default]:h-auto dark:bg-transparent [&_svg]:opacity-100"
+          className="h-auto gap-2 border-none bg-transparent p-0 text-[15px] shadow-none data-[size=default]:h-auto dark:bg-transparent [&_svg]:!text-foreground [&_svg]:opacity-100"
         >
           <SelectValue />
         </SelectTrigger>

@@ -70,7 +70,11 @@ export function NftCard({ nft, priority = false, compact = false, className }: N
         )}
       >
         <h3
-          className={cn('truncate text-[15px] leading-5', !compact && 'md:text-base md:leading-4')}
+          className={cn(
+            'truncate text-[15px] leading-5',
+            // truncate clips descenders on the 16px line, so the padding gives them room without moving the layout
+            !compact && 'md:-my-1 md:py-1 md:text-base md:leading-4',
+          )}
         >
           <Link
             to="/nft/$nftId"
