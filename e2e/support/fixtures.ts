@@ -99,6 +99,19 @@ class App {
     );
   }
 
+  // switches the mock scenario without reloading the page
+  async setScenario(scenario: string) {
+    await this.page.evaluate(
+      (body) =>
+        fetch('/__mock/scenario', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        }),
+      { scenario },
+    );
+  }
+
   async disconnectRealtime(downtimeMs = 0) {
     await this.page.evaluate(
       (body) =>

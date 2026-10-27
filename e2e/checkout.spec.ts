@@ -1,4 +1,4 @@
-import { expect, test } from './support/fixtures';
+import { expect, test, users } from './support/fixtures';
 
 const RESULT_TIMEOUT = 10_000;
 
@@ -31,6 +31,25 @@ test.describe('compra', () => {
 
     await page.goto('/carrinho');
     await expect(page.getByText('Seu carrinho está vazio')).toBeVisible();
+  });
+
+  test('pedido de outro usuário não é exibido', async ({ app, page }) => {
+    await app.signIn();
+    await app.addToCart('emerald-ape-042');
+    await page.goto('/pagamento');
+    await app.openReview();
+    await page.getByRole('button', { name: 'Assinar e pagar' }).click();
+    await expect(page).toHaveURL(/\/pedidos\//);
+    const orderUrl = page.url();
+
+    await page.evaluate(() => localStorage.removeItem('@kurio:access-token'));
+    await app.signIn(users.bruno);
+    await page.goto(orderUrl);
+
+    await expect(
+      page.getByRole('heading', { name: 'Você não tem permissão para ver este pedido' }),
+    ).toBeVisible();
+    await expect(page.getByText('Emerald Ape #042')).toHaveCount(0);
   });
 
   test('pagamento recusado mantém os itens no carrinho', async ({ app, page }) => {

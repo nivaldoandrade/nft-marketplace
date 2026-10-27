@@ -92,7 +92,7 @@ O cenário é escolhido pelo parâmetro `?scenario=` em qualquer página. Ele fi
 - `?scenario=default` volta ao cenário padrão.
 - `?reset-mocks` descarta os dados salvos (usuários, carrinho, pedidos, carteiras, preços) e recomeça das fixtures.
 
-**Eventos sob demanda:** os eventos de tempo real podem ser disparados pelo console do navegador, passando pelo servidor Socket.IO simulado:
+**Controle pelo console:** os eventos de tempo real podem ser disparados pelo console do navegador, passando pelo servidor Socket.IO simulado, e o cenário pode ser trocado sem recarregar a página:
 
 ```js
 // muda o preço e/ou a disponibilidade de um NFT
@@ -106,31 +106,37 @@ fetch('/__mock/realtime/disconnect', {
   method: 'POST',
   body: JSON.stringify({ downtimeMs: 5000 }),
 });
+
+// troca o cenário sem recarregar a página (por exemplo, para o servidor "voltar" depois de um erro)
+fetch('/__mock/scenario', {
+  method: 'POST',
+  body: JSON.stringify({ scenario: 'default' }),
+});
 ```
 
 ## Como reproduzir os fluxos de falha
 
-| Fluxo                                | Como reproduzir                                                             | Resultado esperado                                                          |
-| ------------------------------------ | --------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Rede lenta e respostas fora de ordem | `/?scenario=slow` ou `/?scenario=out-of-order` e troque filtros rapidamente | Skeletons, sem resultado de um filtro antigo sobrescrever o atual           |
-| Erros HTTP e indisponibilidade       | `/?scenario=server-error`, `unavailable` ou `offline`                       | Mensagem de erro com "Tentar novamente"                                     |
-| Falha seguida de recuperação         | `/?scenario=flaky`                                                          | A nova tentativa automática recupera os dados                               |
-| Sessão expirada                      | Entre na conta com `?scenario=short-session` e aguarde 30 s                 | Aviso de sessão expirada e login sobre a página atual                       |
-| Falha ao favoritar                   | Entre na conta com `?scenario=favorites-error` e favorite um NFT            | O coração volta ao estado anterior, com aviso                               |
-| Cupom inválido ou expirado           | No carrinho, aplique `NAOEXISTE` ou `EXPIRADO20`                            | Mensagem no campo do cupom                                                  |
-| Carteira recusa a conexão            | `/pagamento?scenario=wallet-rejected` e "Confirmar compra"                  | A conexão é recusada; a segunda tentativa funciona                          |
-| Preço alterado no checkout           | `/pagamento?scenario=price-change-on-checkout` e "Assinar e pagar"          | "Os valores mudaram", exigindo nova confirmação                             |
-| Edição esgotada no checkout          | `/pagamento?scenario=sold-out-on-checkout` e "Assinar e pagar"              | Revisão bloqueada com "Ajustar carrinho"                                    |
-| Timeout ao criar o pedido            | `/pagamento?scenario=order-timeout` e "Assinar e pagar"                     | Após ~10 s, a nova tentativa recupera o mesmo pedido (sem duplicar)         |
-| Pagamento recusado                   | `/pagamento?scenario=payment-declined` e "Assinar e pagar"                  | Pedido recusado e itens mantidos no carrinho                                |
-| Preço alterado em tempo real         | Com o carrinho ou o detalhe aberto, dispare `nft-updated` pelo console      | Preço atualizado com aviso                                                  |
-| Eventos duplicados e antigos         | `?scenario=realtime-duplicates` e dispare dois `nft-updated` seguidos       | Fica o valor mais recente                                                   |
-| Queda da conexão em tempo real       | Dispare `disconnect` com `downtimeMs: 5000`                                 | "Reconectando…" e, ao voltar, as mudanças perdidas são recuperadas pela API |
-| Pedido pendente após refresh         | Envie um pedido e recarregue `/pagamento` em menos de 4 s                   | Redireciona para o pedido pendente, que é concluído                         |
+| Fluxo                                | Como reproduzir                                                                                                                           | Resultado esperado                                                                     |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| Rede lenta e respostas fora de ordem | `/?scenario=slow` ou `/?scenario=out-of-order` e troque filtros rapidamente                                                               | Skeletons, sem resultado de um filtro antigo sobrescrever o atual                      |
+| Erros HTTP e indisponibilidade       | `/?scenario=server-error`, `unavailable` ou `offline`; depois troque o cenário para `default` pelo console e clique em "Tentar novamente" | Mensagem de erro com "Tentar novamente", que recupera os dados quando o servidor volta |
+| Falha seguida de recuperação         | `/?scenario=flaky`                                                                                                                        | A nova tentativa automática recupera os dados                                          |
+| Sessão expirada                      | Entre na conta com `?scenario=short-session` e aguarde 30 s                                                                               | Aviso de sessão expirada e login sobre a página atual                                  |
+| Falha ao favoritar                   | Entre na conta com `?scenario=favorites-error` e favorite um NFT                                                                          | O coração volta ao estado anterior, com aviso                                          |
+| Cupom inválido ou expirado           | No carrinho, aplique `NAOEXISTE` ou `EXPIRADO20`                                                                                          | Mensagem no campo do cupom                                                             |
+| Carteira recusa a conexão            | `/pagamento?scenario=wallet-rejected` e "Confirmar compra"                                                                                | A conexão é recusada; a segunda tentativa funciona                                     |
+| Preço alterado no checkout           | `/pagamento?scenario=price-change-on-checkout` e "Assinar e pagar"                                                                        | "Os valores mudaram", exigindo nova confirmação                                        |
+| Edição esgotada no checkout          | `/pagamento?scenario=sold-out-on-checkout` e "Assinar e pagar"                                                                            | Revisão bloqueada com "Ajustar carrinho"                                               |
+| Timeout ao criar o pedido            | `/pagamento?scenario=order-timeout` e "Assinar e pagar"                                                                                   | Após ~10 s, a nova tentativa recupera o mesmo pedido (sem duplicar)                    |
+| Pagamento recusado                   | `/pagamento?scenario=payment-declined` e "Assinar e pagar"                                                                                | Pedido recusado e itens mantidos no carrinho                                           |
+| Preço alterado em tempo real         | Com o carrinho ou o detalhe aberto, dispare `nft-updated` pelo console                                                                    | Preço atualizado com aviso                                                             |
+| Eventos duplicados e antigos         | `?scenario=realtime-duplicates` e dispare dois `nft-updated` seguidos                                                                     | Fica o valor mais recente                                                              |
+| Queda da conexão em tempo real       | Dispare `disconnect` com `downtimeMs: 5000`                                                                                               | "Reconectando…" e, ao voltar, as mudanças perdidas são recuperadas pela API            |
+| Pedido pendente após refresh         | Envie um pedido e recarregue `/pagamento` em menos de 4 s                                                                                 | Redireciona para o pedido pendente, que é concluído                                    |
 
 ## Testes e auditoria
 
-- **Playwright:** 68 testes cobrindo os 11 fluxos pedidos, além de rede lenta, respostas fora de ordem e erros com recuperação, em desktop (1440×900) e mobile (Pixel 7), com regressão visual de início, detalhe, carrinho e pagamento (`e2e/__screenshots__/`). Cada teste parte de um estado isolado. Relatório HTML com traces das falhas em `playwright-report/`.
+- **Playwright:** 70 testes cobrindo os 12 fluxos pedidos, além de respostas fora de ordem e acesso a pedido de outro usuário, em desktop (1440×900) e mobile (Pixel 7), com regressão visual de início, detalhe, carrinho e pagamento (`e2e/__screenshots__/`). Cada teste parte de um estado isolado. Relatório HTML com traces das falhas em `playwright-report/`.
 - **Lighthouse:** início e detalhe, mobile e desktop, mediana de 3 medições. Na URL publicada: Performance 90 no mobile e 100 no desktop, com Accessibility, Best Practices e SEO entre 97 e 100. Resultados, ambiente e análise em [`lighthouse/reports/deploy/summary.md`](./lighthouse/reports/deploy/summary.md), [`lighthouse/reports/summary.md`](./lighthouse/reports/summary.md) (local) e no `ARCHITECTURE.md`.
 
 ## Estrutura

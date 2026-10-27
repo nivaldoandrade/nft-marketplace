@@ -27,11 +27,11 @@ Base `VITE_API_URL` (`/api`). Respostas em JSON; valores em ETH trafegam como st
 | `GET /me/wallets` · `PUT /me/wallets/:slot`                                 | Bearer                     | Carteiras principal e secundária e a conexão atual · cadastro/edição (`sameAsPrimary` copia a principal)                                                          |
 | `POST /me/wallets/:id/connect` · `POST /me/wallets/disconnect`              | Bearer                     | Conexão simulada com a carteira (pode ser recusada)                                                                                                               |
 | `POST /orders`                                                              | Bearer + `Idempotency-Key` | Cria o pedido a partir do `quoteId` revisado; 409 `QUOTE_OUTDATED` (com a cotação nova), `QUANTITY_UNAVAILABLE`, `WALLET_NOT_CONNECTED` ou `IDEMPOTENCY_CONFLICT` |
-| `GET /orders?status=` · `GET /orders/:id`                                   | Bearer                     | Pedidos do usuário (pedido de outro usuário responde 404)                                                                                                         |
+| `GET /orders?status=` · `GET /orders/:id`                                   | Bearer                     | Pedidos do usuário; pedido inexistente responde 404 e pedido de outro usuário, 403 `FORBIDDEN`                                                                    |
 | `GET`/`PATCH /me/profile` · `PUT`/`DELETE /me/avatar` · `POST /me/password` | Bearer                     | Perfil, avatar e troca de senha                                                                                                                                   |
 
 - **Erros:** `{ error: { code, message, fields? } }`. `code` segue `ErrorCode` (`src/app/errors/apiErrors.ts`), com mensagem em português; `fields` traz erros por campo, exibidos nos formulários. Respostas que não são JSON viram `INVALID_RESPONSE`; falhas de rede e timeout (10 s) viram `NETWORK_ERROR` e `TIMEOUT`.
-- **Controle dos mocks (fora de `/api`):** `POST /__mock/realtime/nft-updated` e `POST /__mock/realtime/disconnect`, usados pelos testes e por quem demonstra; passam pelo servidor simulado, nunca direto pela interface.
+- **Controle dos mocks (fora de `/api`):** `POST /__mock/realtime/nft-updated` e `POST /__mock/realtime/disconnect`, que passam pelo servidor Socket.IO simulado, nunca direto pela interface, e `POST /__mock/scenario` (`{ scenario }`), que troca o cenário sem recarregar a página (o mesmo valor de `?scenario=`). São usados pelos testes e por quem demonstra.
 
 ## Eventos em tempo real
 
@@ -329,23 +329,25 @@ Os cenários de uso único valem uma vez por carregamento da página.
 - **Atalhos:** fora do teste de autenticação, o login é feito pela API simulada, sem passar pelo formulário.
 - **Regressão visual:** início, detalhe, carrinho e pagamento nos dois viewports, com animações desligadas, `prefers-reduced-motion` e todas as imagens carregadas antes da captura. As baselines ficam versionadas em `e2e/__screenshots__/` e são atualizadas com `yarn test:e2e:update`.
 - **Relatório:** HTML (`yarn test:e2e:report`), com trace, vídeo e captura das falhas.
-- **Cobertura dos 11 fluxos do README:**
+- **Cobertura dos 12 fluxos do enunciado:**
 
-| Fluxo                                                               | Spec                    |
-| ------------------------------------------------------------------- | ----------------------- |
-| 1. Busca, filtros, ordenação, paginação e histórico                 | `catalog.spec.ts`       |
-| 2. Acesso direto e recurso inexistente                              | `nft-details.spec.ts`   |
-| 3. Cadastro, login, expiração, logout e troca de usuário            | `auth.spec.ts`          |
-| 4. Favoritos com falha e recuperação                                | `favorites.spec.ts`     |
-| 5. Carrinho, quantidades, remoção, cupom e persistência             | `cart.spec.ts`          |
-| 6. Compra do catálogo ao recibo                                     | `checkout.spec.ts`      |
-| 7. Pagamento recusado, clique repetido e timeout com o mesmo pedido | `checkout.spec.ts`      |
-| 8. Perfil, avatar, senha e carteiras                                | `account.spec.ts`       |
-| 9. Preço e disponibilidade via Socket.IO no checkout                | `checkout.spec.ts`      |
-| 10. Eventos duplicados ou antigos, desconexão e pedido pendente     | `realtime.spec.ts`      |
-| 11. Teclado, foco de diálogos e validação                           | `accessibility.spec.ts` |
+| Fluxo                                                                 | Spec                    |
+| --------------------------------------------------------------------- | ----------------------- |
+| 1. Busca, filtros, ordenação, paginação e histórico                   | `catalog.spec.ts`       |
+| 2. Acesso direto e recurso inexistente                                | `nft-details.spec.ts`   |
+| 3. Cadastro, login, expiração, logout e troca de usuário              | `auth.spec.ts`          |
+| 4. Favoritos com falha e recuperação                                  | `favorites.spec.ts`     |
+| 5. Carrinho, quantidades, remoção, cupom e persistência               | `cart.spec.ts`          |
+| 6. Compra do catálogo ao recibo                                       | `checkout.spec.ts`      |
+| 7. Pagamento recusado, clique repetido e timeout com o mesmo pedido   | `checkout.spec.ts`      |
+| 8. Perfil, avatar, senha e carteiras                                  | `account.spec.ts`       |
+| 9. Preço e disponibilidade via Socket.IO no checkout                  | `checkout.spec.ts`      |
+| 10. Eventos duplicados ou antigos, desconexão e pedido pendente       | `realtime.spec.ts`      |
+| 11. Teclado, foco de diálogos e validação                             | `accessibility.spec.ts` |
+| 12. Skeletons com rede lenta, falha e recuperação após nova tentativa | `network.spec.ts`       |
 
-- **Rede e erros:** além dos 11 fluxos, `network.spec.ts` cobre os skeletons com rede lenta, respostas fora de ordem na paginação, a mensagem de erro com "Tentar novamente" e a recuperação automática de uma falha temporária.
+- **Além dos 12 fluxos:** `network.spec.ts` também cobre respostas fora de ordem na paginação e a recuperação automática de uma falha temporária; `checkout.spec.ts` confirma que o pedido de outro usuário não é exibido (403).
+- **Larguras avaliadas:** 390, 768 e 1440px em todas as rotas (início, detalhe existente e inexistente, carrinho, pagamento, perfil, carteiras, lista de interesse, rota inexistente e modais de login e cadastro), logado e com itens no carrinho, sem overflow horizontal.
 
 ### Performance e Lighthouse
 

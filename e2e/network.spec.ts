@@ -36,21 +36,17 @@ test.describe('rede e erros', () => {
     );
   });
 
-  test('erro do servidor mostra a mensagem e permite tentar de novo', async ({
-    app: _app,
-    page,
-  }) => {
+  test('erro do servidor mostra a mensagem e recupera ao tentar de novo', async ({ app, page }) => {
     await page.goto('/?scenario=fast,realtime-off,server-error');
 
     const alert = page.getByRole('alert').filter({ hasText: 'Não foi possível carregar os NFTs' });
     await expect(alert).toBeVisible({ timeout: RETRIES_TIMEOUT });
 
-    const retry = page.waitForRequest((request) => new URL(request.url()).pathname === '/api/nfts');
+    // the error only shows after the automatic retries, so the next request comes from the button
+    await app.setScenario('fast,realtime-off');
     await alert.getByRole('button', { name: 'Tentar novamente' }).click();
-    await retry;
-    await expect(alert.getByRole('button', { name: 'Tentar novamente' })).toBeVisible({
-      timeout: RETRIES_TIMEOUT,
-    });
+    await expect(firstCardName(page)).toBeVisible();
+    await expect(alert).toBeHidden();
   });
 
   test('falha temporária é recuperada pela nova tentativa automática', async ({
