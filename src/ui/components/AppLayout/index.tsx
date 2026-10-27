@@ -4,6 +4,7 @@ import { Footer } from '@/ui/components/Footer';
 import { Header } from '@/ui/components/Header';
 import { MobileNav } from '@/ui/components/MobileNav';
 import { Toaster } from '@/ui/components/Toaster';
+import { AuthDialog } from '@/ui/pages/auth';
 
 export function AppLayout() {
   const isNftDetails = useRouterState({
@@ -28,6 +29,7 @@ export function AppLayout() {
         }
       />
       {!isNftDetails && <MobileNav />}
+      <AuthDialog />
       <Toaster />
     </>
   );

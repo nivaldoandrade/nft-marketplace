@@ -1,7 +1,10 @@
 import { useNavigate, useRouterState, useSearch } from '@tanstack/react-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useAuth } from '@/app/contexts/AuthContext/useAuth';
+import { useAuthModal } from '@/ui/hooks/useAuthModal';
 import { useIsSectionActive } from '@/ui/hooks/useIsSectionActive';
+import { getFirstName, getInitials } from '@/ui/utils/initials';
 import { CATALOG_SECTION_ID, scrollToCatalog } from '@/ui/utils/sections';
 
 const MARKET_PATHS = ['/nft', '/carrinho', '/pagamento'];
@@ -13,6 +16,8 @@ export function useHeader() {
   const shouldRestoreFocusRef = useRef(false);
 
   const navigate = useNavigate();
+  const { user, isSignedIn } = useAuth();
+  const { open: openAuthModal } = useAuthModal();
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const urlQuery = useSearch({ strict: false, select: (search) => search.q });
 
@@ -138,5 +143,9 @@ export function useHeader() {
     handleSubmitSearch,
     handleSearchKeyDown,
     handleClearSearch,
+    isSignedIn,
+    initials: user ? getInitials(user.displayName) : '',
+    firstName: user ? getFirstName(user.displayName) : '',
+    openAuthModal,
   };
 }

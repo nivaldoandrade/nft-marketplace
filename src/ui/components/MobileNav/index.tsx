@@ -1,6 +1,9 @@
 import { Link, useRouterState } from '@tanstack/react-router';
 
+import { useAuth } from '@/app/contexts/AuthContext/useAuth';
+import { AccountMenu } from '@/ui/components/AccountMenu';
 import { HeartIcon, HomeIcon, ScanIcon, ShopIcon, UserIcon } from '@/ui/components/Icons';
+import { useAuthModal } from '@/ui/hooks/useAuthModal';
 import { cn } from '@/ui/utils/cn';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 import { SEARCH_INPUT_ID, scrollToCatalog } from '@/ui/utils/sections';
@@ -11,6 +14,8 @@ const itemClassName =
 export function MobileNav() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const isHome = pathname === '/';
+  const { isSignedIn } = useAuth();
+  const { open: openAuthModal } = useAuthModal();
 
   function handleSearch() {
     const input = document.getElementById(SEARCH_INPUT_ID);
@@ -88,14 +93,29 @@ export function MobileNav() {
           >
             <ShopIcon className="size-5" />
           </button>
-          <button
-            type="button"
-            aria-label="Perfil"
-            className={cn(itemClassName, 'left-[calc(50%+76px+(50%-76px)*0.618-22px)]')}
-            onClick={() => notifyUnavailable('O perfil')}
-          >
-            <UserIcon className="size-5" />
-          </button>
+          {isSignedIn ? (
+            <AccountMenu side="top">
+              <button
+                type="button"
+                aria-label="Conta"
+                className={cn(
+                  itemClassName,
+                  'left-[calc(50%+76px+(50%-76px)*0.618-22px)] text-accent',
+                )}
+              >
+                <UserIcon className="size-5" />
+              </button>
+            </AccountMenu>
+          ) : (
+            <button
+              type="button"
+              aria-label="Entrar"
+              className={cn(itemClassName, 'left-[calc(50%+76px+(50%-76px)*0.618-22px)]')}
+              onClick={() => openAuthModal()}
+            >
+              <UserIcon className="size-5" />
+            </button>
+          )}
         </div>
       </nav>
     </>

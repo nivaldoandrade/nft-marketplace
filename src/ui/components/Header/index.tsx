@@ -1,7 +1,8 @@
+import { AccountMenu } from '@/ui/components/AccountMenu';
 import { Container } from '@/ui/components/Container';
 import { NavLink } from '@/ui/components/Header/NavLink';
 import { useHeader } from '@/ui/components/Header/useHeader';
-import { CartIcon, CloseIcon, LoginIcon, SearchIcon } from '@/ui/components/Icons';
+import { ArrowDownIcon, CartIcon, CloseIcon, LoginIcon, SearchIcon } from '@/ui/components/Icons';
 import { Logo } from '@/ui/components/Logo';
 import { useCatalogLink } from '@/ui/hooks/useCatalogLink';
 import { cn } from '@/ui/utils/cn';
@@ -28,6 +29,10 @@ export function Header() {
     handleSubmitSearch,
     handleSearchKeyDown,
     handleClearSearch,
+    isSignedIn,
+    initials,
+    firstName,
+    openAuthModal,
   } = useHeader();
   const catalogLink = useCatalogLink();
 
@@ -144,15 +149,30 @@ export function Header() {
               <CartIcon className="h-6 w-[25px]" />
             </button>
 
-            <button
-              type="button"
-              onClick={() => notifyUnavailable('O login')}
-              title="Entrar"
-              className="flex size-[35px] shrink-0 items-center justify-center gap-1 rounded-md bg-primary font-medium text-primary-foreground pressable hover:bg-accent lg:w-[100px]"
-            >
-              <LoginIcon className="size-5" />
-              <span className="max-lg:sr-only">Entrar</span>
-            </button>
+            {isSignedIn ? (
+              <AccountMenu>
+                <button
+                  type="button"
+                  aria-label={`Conta de ${firstName}`}
+                  className="flex h-[35px] shrink-0 items-center gap-1.5 rounded-full pressable hover:text-accent"
+                >
+                  <span className="flex size-[35px] shrink-0 items-center justify-center rounded-full border border-primary bg-secondary text-sm font-bold text-accent">
+                    {initials}
+                  </span>
+                  <ArrowDownIcon className="size-3 shrink-0" />
+                </button>
+              </AccountMenu>
+            ) : (
+              <button
+                type="button"
+                onClick={() => openAuthModal()}
+                title="Entrar"
+                className="flex size-[35px] shrink-0 items-center justify-center gap-1 rounded-md bg-primary font-medium text-primary-foreground pressable hover:bg-accent lg:w-[100px]"
+              >
+                <LoginIcon className="size-5" />
+                <span className="max-lg:sr-only">Entrar</span>
+              </button>
+            )}
           </div>
         </div>
       </Container>
