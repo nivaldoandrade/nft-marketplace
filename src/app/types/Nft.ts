@@ -22,6 +22,15 @@ export const Network = {
 
 export type Network = ValueOf<typeof Network>;
 
+export const EditionType = {
+  UNIQUE: '1/1',
+  LIMITED_10: '1/10',
+  LIMITED_50: '1/50',
+  OPEN: 'open',
+} as const;
+
+export type EditionType = ValueOf<typeof EditionType>;
+
 export const NftTab = {
   ALL: 'all',
   NEW: 'new',
@@ -54,4 +63,31 @@ export type NftSummary = {
   category: NftCategory;
   network: Network;
   collection: NftCollection;
+};
+
+export type NftEdition = {
+  type: EditionType;
+  available: number;
+  maxPerOrder: number;
+};
+
+export type Nft = NftSummary & {
+  tokenId: string;
+  gallery: string[];
+  description: string;
+  details: string[];
+  attributes: string[];
+  rating: number;
+  reviewsCount: number;
+  contractAddress: string;
+  royaltyPercent: number;
+  editions: NftEdition[];
+};
+
+export type NftReview = {
+  id: string;
+  author: string;
+  rating: number;
+  comment: string;
+  createdAt: string;
 };

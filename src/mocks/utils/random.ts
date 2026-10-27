@@ -18,3 +18,17 @@ export function pick<T>(random: () => number, items: readonly T[]): T {
 export function randomInt(random: () => number, min: number, max: number) {
   return Math.floor(random() * (max - min + 1)) + min;
 }
+
+export function randomHex(random: () => number, length: number) {
+  return Array.from({ length }, () => Math.floor(random() * 16).toString(16)).join('');
+}
+
+export function hashSeed(value: string) {
+  let hash = 2166136261;
+
+  for (const char of value) {
+    hash = Math.imul(hash ^ char.charCodeAt(0), 16777619);
+  }
+
+  return hash >>> 0;
+}

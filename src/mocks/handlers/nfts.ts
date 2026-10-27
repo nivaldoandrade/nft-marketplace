@@ -5,14 +5,16 @@ import { compareEth, isEthValue } from '@/app/utils/eth';
 import { apiPath } from '@/mocks/config';
 import { db } from '@/mocks/db';
 import type { NftRecord } from '@/mocks/db/types';
-import { toNftSummary } from '@/mocks/domain/nfts';
+import { toNft, toNftSummary } from '@/mocks/domain/nfts';
 import { FEATURED_NFT_IDS } from '@/mocks/fixtures/nfts';
 import { getScenarioConfig } from '@/mocks/scenarios';
+import { apiError } from '@/mocks/utils/responses';
 
 const DEFAULT_PER_PAGE = 9;
 const MAX_PER_PAGE = 30;
 const NEW_RELEASES_LIMIT = 30;
 const TRENDING_MIN_POPULARITY = 600;
+const RELATED_LIMIT = 10;
 
 function parseList<T extends string>(value: string | null, allowed: readonly T[]) {
   return (value?.split(',') ?? []).filter((item): item is T => allowed.includes(item as T));
@@ -147,5 +149,33 @@ export const nftHandlers = [
         : null,
       promos: FEATURED_NFT_IDS.promos.map(byId).filter(Boolean).map(toNftSummary),
     });
+  }),
+
+  http.get(apiPath('/nfts/:nftId'), ({ params }) => {
+    const nft = db.nfts[params.nftId as string];
+
+    return nft ? HttpResponse.json(toNft(nft)) : apiError(404, 'RESOURCE_NOT_FOUND');
+  }),
+
+  http.get(apiPath('/nfts/:nftId/related'), ({ params }) => {
+    const nft = db.nfts[params.nftId as string];
+
+    if (!nft) {
+      return apiError(404, 'RESOURCE_NOT_FOUND');
+    }
+
+    const items = Object.values(db.nfts)
+      .filter((item) => item.collection.id === nft.collection.id && item.id !== nft.id)
+      .sort((a, b) => b.popularity - a.popularity)
+      .slice(0, RELATED_LIMIT)
+      .map(toNftSummary);
+
+    return HttpResponse.json({ items });
+  }),
+
+  http.get(apiPath('/nfts/:nftId/reviews'), ({ params }) => {
+    const nft = db.nfts[params.nftId as string];
+
+    return nft ? HttpResponse.json({ items: nft.reviews }) : apiError(404, 'RESOURCE_NOT_FOUND');
   }),
 ];

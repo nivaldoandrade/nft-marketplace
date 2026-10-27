@@ -1,6 +1,6 @@
-import type { NftSummary } from '@/app/types/Nft';
+import type { Nft, NftReview } from '@/app/types/Nft';
 
-export type NftRecord = NftSummary & { createdAt: string; popularity: number };
+export type NftRecord = Nft & { createdAt: string; popularity: number; reviews: NftReview[] };
 
 export type MockDb = {
   nfts: Record<string, NftRecord>;

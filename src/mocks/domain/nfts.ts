@@ -1,4 +1,4 @@
-import type { NftSummary } from '@/app/types/Nft';
+import type { Nft, NftSummary } from '@/app/types/Nft';
 import type { NftRecord } from '@/mocks/db/types';
 
 export function toNftSummary(nft: NftRecord): NftSummary {
@@ -13,4 +13,10 @@ export function toNftSummary(nft: NftRecord): NftSummary {
     network: nft.network,
     collection: nft.collection,
   };
+}
+
+export function toNft(nft: NftRecord): Nft {
+  const { createdAt: _createdAt, popularity: _popularity, reviews: _reviews, ...detail } = nft;
+
+  return detail;
 }
