@@ -1,4 +1,5 @@
 import { Skeleton } from '@/ui/components/ui/skeleton';
+import { FacetOption } from '@/ui/pages/home/components/CatalogFilters/FacetOption';
 import { cn } from '@/ui/utils/cn';
 
 type FacetListProps<T extends string> = {
@@ -30,28 +31,15 @@ export function FacetList<T extends string>({
                 <Skeleton className="h-4 w-full" />
               </li>
             ))
-          : options.map((option) => {
-              const isSelected = selected.includes(option.id);
-
-              return (
-                <li key={option.id}>
-                  <button
-                    type="button"
-                    aria-pressed={isSelected}
-                    onClick={() => onToggle(option.id)}
-                    className={cn(
-                      'flex h-10 w-full items-center justify-between text-[15px] text-muted-foreground transition-colors hover:text-accent',
-                      isSelected && 'text-accent',
-                    )}
-                  >
-                    <span className={cn(isSelected && 'underline underline-offset-4')}>
-                      {option.label}
-                    </span>
-                    <span className={cn(emphasizeCount && 'font-bold')}>({option.count})</span>
-                  </button>
-                </li>
-              );
-            })}
+          : options.map((option) => (
+              <FacetOption
+                key={option.id}
+                option={option}
+                isSelected={selected.includes(option.id)}
+                emphasizeCount={emphasizeCount}
+                onToggle={onToggle}
+              />
+            ))}
       </ul>
     </fieldset>
   );

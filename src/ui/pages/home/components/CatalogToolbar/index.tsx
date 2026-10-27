@@ -1,9 +1,9 @@
 import { NftTab } from '@/app/types/Nft';
 import { FilterIcon } from '@/ui/components/Icons';
+import { CatalogTab } from '@/ui/pages/home/components/CatalogToolbar/CatalogTab';
 import { FiltersSheet } from '@/ui/pages/home/components/FiltersSheet';
 import { SortSelect } from '@/ui/pages/home/components/SortSelect';
 import { useCatalog } from '@/ui/pages/home/useCatalog';
-import { cn } from '@/ui/utils/cn';
 import { tabLabels } from '@/ui/utils/labels';
 
 export function CatalogToolbar() {
@@ -18,26 +18,15 @@ export function CatalogToolbar() {
           aria-label="Listas de NFTs"
           className="flex max-w-full [scrollbar-width:none] gap-4 overflow-x-auto md:gap-5"
         >
-          {Object.values(NftTab).map((tab, index) => {
-            const isActive = search.tab === tab;
-
-            return (
-              <button
-                key={tab}
-                type="button"
-                aria-pressed={isActive}
-                onClick={() => setFilters({ tab })}
-                className={cn(
-                  'relative shrink-0 pb-1 text-sm leading-4 text-foreground transition-colors hover:text-accent md:pb-1.5 md:text-[15px] md:font-medium',
-                  index === 0 && 'max-md:-mr-3',
-                  isActive &&
-                    'font-bold text-accent after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:bg-primary md:font-medium md:after:w-[86%]',
-                )}
-              >
-                {tabLabels[tab]}
-              </button>
-            );
-          })}
+          {Object.values(NftTab).map((tab, index) => (
+            <CatalogTab
+              key={tab}
+              label={tabLabels[tab]}
+              isActive={search.tab === tab}
+              isFirst={index === 0}
+              onSelect={() => setFilters({ tab })}
+            />
+          ))}
         </div>
 
         <SortSelect id="catalog-sort" className="hidden md:flex" />
