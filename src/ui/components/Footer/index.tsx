@@ -12,7 +12,7 @@ import {
 } from '@/ui/components/Icons';
 import { Logo } from '@/ui/components/Logo';
 import { useCatalogLink } from '@/ui/hooks/useCatalogLink';
-import { useOpenFavoritesPage } from '@/ui/hooks/useOpenFavoritesPage';
+import { useOpenPrivatePage } from '@/ui/hooks/useOpenPrivatePage';
 import { cn } from '@/ui/utils/cn';
 import { categoryLabels } from '@/ui/utils/labels';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
@@ -37,12 +37,12 @@ const highlights = [
 ];
 
 const profileLinks = [
-  'Meu perfil',
-  'Minha coleção',
-  'Atividade',
-  'Estúdio do criador',
-  'Lista de interesse',
-];
+  { label: 'Meu perfil', path: '/perfil/dados' },
+  { label: 'Minha coleção' },
+  { label: 'Atividade' },
+  { label: 'Estúdio do criador' },
+  { label: 'Lista de interesse', path: '/perfil/lista-de-interesse' },
+] as const;
 
 const helpLinks = [
   'Central de ajuda',
@@ -71,7 +71,7 @@ type FooterProps = {
 
 export function Footer({ className }: FooterProps) {
   const catalogLink = useCatalogLink();
-  const openFavoritesPage = useOpenFavoritesPage();
+  const openPrivatePage = useOpenPrivatePage();
 
   return (
     <footer
@@ -121,18 +121,16 @@ export function Footer({ className }: FooterProps) {
               Meu perfil
             </h2>
             <ul>
-              {profileLinks.map((label) => (
-                <li key={label}>
+              {profileLinks.map((link) => (
+                <li key={link.label}>
                   <button
                     type="button"
                     className={listItemClassName}
                     onClick={() =>
-                      label === 'Lista de interesse'
-                        ? openFavoritesPage()
-                        : notifyUnavailable(label)
+                      'path' in link ? openPrivatePage(link.path) : notifyUnavailable(link.label)
                     }
                   >
-                    {label}
+                    {link.label}
                   </button>
                 </li>
               ))}

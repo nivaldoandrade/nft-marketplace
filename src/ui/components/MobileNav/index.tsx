@@ -5,7 +5,7 @@ import { useCart } from '@/app/hooks/queries/cart/useCart';
 import { AccountMenu } from '@/ui/components/AccountMenu';
 import { HeartIcon, HomeIcon, ScanIcon, ShopIcon, UserIcon } from '@/ui/components/Icons';
 import { useAuthModal } from '@/ui/hooks/useAuthModal';
-import { useOpenFavoritesPage } from '@/ui/hooks/useOpenFavoritesPage';
+import { useOpenPrivatePage } from '@/ui/hooks/useOpenPrivatePage';
 import { cn } from '@/ui/utils/cn';
 import { SEARCH_INPUT_ID, scrollToCatalog } from '@/ui/utils/sections';
 
@@ -18,7 +18,7 @@ export function MobileNav() {
   const isFavoritesPage = pathname === '/perfil/lista-de-interesse';
   const { isSignedIn } = useAuth();
   const { open: openAuthModal } = useAuthModal();
-  const openFavoritesPage = useOpenFavoritesPage();
+  const openPrivatePage = useOpenPrivatePage();
   const { itemsCount: cartCount } = useCart();
 
   function handleSearch() {
@@ -81,7 +81,7 @@ export function MobileNav() {
               'left-[calc((50%-76px)*0.901-22px)]',
               isFavoritesPage && 'text-accent',
             )}
-            onClick={openFavoritesPage}
+            onClick={() => openPrivatePage('/perfil/lista-de-interesse')}
           >
             <HeartIcon className="h-[18px] w-5" />
           </button>
