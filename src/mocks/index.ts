@@ -7,8 +7,15 @@ export async function enableMocking() {
 
   const { worker } = await import('@/mocks/browser');
 
-  await worker.start({
-    onUnhandledRequest: 'bypass',
-    quiet: true,
+  const options = { onUnhandledRequest: 'bypass', quiet: true } as const;
+
+  await worker.start(options);
+
+  // MSW unregisters the page on unload, so a page restored from the back/forward cache stops being mocked
+  window.addEventListener('pageshow', async (event) => {
+    if (event.persisted) {
+      worker.stop();
+      await worker.start(options);
+    }
   });
 }
