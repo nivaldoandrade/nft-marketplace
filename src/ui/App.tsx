@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 
 import { AuthProvider } from '@/app/contexts/AuthContext';
 import { useAuth } from '@/app/contexts/AuthContext/useAuth';
+import { RealtimeProvider } from '@/app/contexts/RealtimeContext';
 import { queryClient } from '@/app/libs/queryClient';
 import { toast } from '@/app/libs/toast';
 import { router } from '@/app/router';
@@ -32,7 +33,9 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider onSessionExpired={handleSessionExpired}>
-        <AppRouter />
+        <RealtimeProvider>
+          <AppRouter />
+        </RealtimeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

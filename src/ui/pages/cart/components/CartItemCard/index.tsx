@@ -3,8 +3,9 @@ import { Link } from '@tanstack/react-router';
 import type { CartItem } from '@/app/types/Cart';
 import type { QuoteIssue } from '@/app/types/Quote';
 import { QuantityStepper } from '@/ui/components/QuantityStepper';
-import { getItemIssueMessage } from '@/ui/pages/cart/components/itemIssueMessage';
+import { getItemIssueMessage, isBlockingIssue } from '@/ui/pages/cart/components/itemIssueMessage';
 import { getItemMaxQuantity } from '@/ui/pages/cart/useCartPage';
+import { cn } from '@/ui/utils/cn';
 import { formatPrice } from '@/ui/utils/formatPrice';
 import { editionLabels } from '@/ui/utils/labels';
 
@@ -59,7 +60,16 @@ export function CartItemCard({ item, issue, onChangeQuantity, onRemove }: CartIt
           </div>
         </div>
       </div>
-      {issueMessage && <p className="px-1 text-[13px] leading-4 text-coral">{issueMessage}</p>}
+      {issueMessage && (
+        <p
+          className={cn(
+            'px-1 text-[13px] leading-4',
+            isBlockingIssue(issue) ? 'text-coral' : 'text-muted-foreground',
+          )}
+        >
+          {issueMessage}
+        </p>
+      )}
     </li>
   );
 }

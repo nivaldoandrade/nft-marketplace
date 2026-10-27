@@ -6,8 +6,11 @@ import { useCartQuote } from '@/app/hooks/queries/cart/useCartQuote';
 import { toast } from '@/app/libs/toast';
 import { AuthMode } from '@/app/router/authSearch';
 import type { CartItem } from '@/app/types/Cart';
-import { QuoteIssueType } from '@/app/types/Quote';
+import { compareEth } from '@/app/utils/eth';
 import { useAuthModal } from '@/ui/hooks/useAuthModal';
+import { useValueChange } from '@/ui/hooks/useValueChange';
+import { isBlockingIssue } from '@/ui/pages/cart/components/itemIssueMessage';
+import { formatPrice } from '@/ui/utils/formatPrice';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
 export function getItemMaxQuantity(item: CartItem) {
@@ -31,10 +34,28 @@ export function useCartPage() {
   const itemIssues = new Map(
     (quote?.issues ?? []).flatMap((issue) => (issue.itemId ? [[issue.itemId, issue]] : [])),
   );
-  const hasBlockingIssues = (quote?.issues ?? []).some(
-    (issue) =>
-      issue.type === QuoteIssueType.UNAVAILABLE || issue.type === QuoteIssueType.QUANTITY_EXCEEDED,
-  );
+  const hasBlockingIssues = (quote?.issues ?? []).some(isBlockingIssue);
+
+  // price and availability can change through realtime events while the cart is open
+  useValueChange(items, (previousItems, currentItems) => {
+    currentItems.forEach((item) => {
+      const previous = previousItems.find(({ id }) => id === item.id);
+
+      if (!previous) {
+        return;
+      }
+
+      if (compareEth(previous.unitPrice, item.unitPrice) !== 0) {
+        toast.info(`O preço de ${item.name} mudou para ${formatPrice(item.unitPrice)}.`);
+      }
+
+      if (previous.available > 0 && item.available === 0) {
+        toast.warning(`${item.name} esgotou. Remova o item para continuar.`);
+      } else if (previous.available >= item.quantity && item.available < item.quantity) {
+        toast.warning(`Restam apenas ${item.available} unidade(s) de ${item.name}.`);
+      }
+    });
+  });
 
   function notifyError(error: unknown) {
     toast.error(getErrorMessage(getApiErrorCode(error)));

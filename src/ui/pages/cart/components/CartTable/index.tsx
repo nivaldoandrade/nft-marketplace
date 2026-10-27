@@ -4,8 +4,9 @@ import type { CartItem } from '@/app/types/Cart';
 import type { QuoteIssue } from '@/app/types/Quote';
 import { TrashIcon } from '@/ui/components/Icons';
 import { QuantityStepper } from '@/ui/components/QuantityStepper';
-import { getItemIssueMessage } from '@/ui/pages/cart/components/itemIssueMessage';
+import { getItemIssueMessage, isBlockingIssue } from '@/ui/pages/cart/components/itemIssueMessage';
 import { getItemMaxQuantity } from '@/ui/pages/cart/useCartPage';
+import { cn } from '@/ui/utils/cn';
 import { formatPrice } from '@/ui/utils/formatPrice';
 import { editionLabels } from '@/ui/utils/labels';
 
@@ -40,7 +41,8 @@ export function CartTable({ items, itemIssues, onChangeQuantity, onRemove }: Car
 
       <div role="rowgroup" className="col-span-full grid grid-cols-subgrid gap-y-3">
         {items.map((item) => {
-          const issueMessage = getItemIssueMessage(itemIssues.get(item.id));
+          const issue = itemIssues.get(item.id);
+          const issueMessage = getItemIssueMessage(issue);
 
           return (
             <div key={item.id} className="col-span-full grid grid-cols-subgrid gap-y-1">
@@ -98,7 +100,14 @@ export function CartTable({ items, itemIssues, onChangeQuantity, onRemove }: Car
                 </div>
               </div>
               {issueMessage && (
-                <p className="col-span-full text-[13px] leading-4 text-coral">{issueMessage}</p>
+                <p
+                  className={cn(
+                    'col-span-full text-[13px] leading-4',
+                    isBlockingIssue(issue) ? 'text-coral' : 'text-muted-foreground',
+                  )}
+                >
+                  {issueMessage}
+                </p>
               )}
             </div>
           );

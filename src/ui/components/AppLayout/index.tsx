@@ -1,5 +1,6 @@
 import { Outlet, useRouterState } from '@tanstack/react-router';
 
+import { ConnectionStatus } from '@/ui/components/ConnectionStatus';
 import { Footer } from '@/ui/components/Footer';
 import { Header } from '@/ui/components/Header';
 import { MobileNav } from '@/ui/components/MobileNav';
@@ -35,6 +36,7 @@ export function AppLayout() {
       {!hidesMobileNav && <MobileNav />}
       <AuthDialog />
       <Toaster />
+      <ConnectionStatus />
     </>
   );
 }

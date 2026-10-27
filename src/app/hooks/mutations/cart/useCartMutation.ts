@@ -8,7 +8,7 @@ type CartMutationOptions<TVariables> = {
   optimisticUpdate?: (cart: Cart, variables: TVariables) => Cart;
 };
 
-const MUTATION_KEY = ['cart'];
+export const CART_MUTATION_KEY = ['cart'];
 
 export function useCartMutation<TVariables>({
   mutationFn,
@@ -17,10 +17,10 @@ export function useCartMutation<TVariables>({
   const queryClient = useQueryClient();
 
   // queued changes keep their optimistic state until the last response arrives
-  const isLastPending = () => queryClient.isMutating({ mutationKey: MUTATION_KEY }) === 1;
+  const isLastPending = () => queryClient.isMutating({ mutationKey: CART_MUTATION_KEY }) === 1;
 
   return useMutation({
-    mutationKey: MUTATION_KEY,
+    mutationKey: CART_MUTATION_KEY,
     scope: { id: 'cart' },
     mutationFn,
     onMutate: async (variables) => {

@@ -7,6 +7,9 @@ import { useGetNftById } from '@/app/hooks/queries/nfts/useGetNftById';
 import { toast } from '@/app/libs/toast';
 import type { EditionType, NftEdition } from '@/app/types/Nft';
 import { useFavoriteAction } from '@/ui/hooks/useFavoriteAction';
+import { useValueChange } from '@/ui/hooks/useValueChange';
+import { formatPrice } from '@/ui/utils/formatPrice';
+import { editionLabels } from '@/ui/utils/labels';
 
 export const DETAILS_TAB = 'details';
 export const REVIEWS_TAB = 'reviews';
@@ -33,6 +36,19 @@ export function useNftDetails(nftId: string) {
   const isSoldOut = !selectedEdition;
 
   const quantityLimitMessage = getQuantityLimitMessage(quantity, maxQuantity, selectedEdition);
+
+  // price and availability can change through realtime events while the page is open
+  useValueChange(nft?.price, (_previous, current) => {
+    toast.info(`O preço deste NFT mudou para ${formatPrice(current)}.`);
+  });
+
+  useValueChange(selectedEdition?.type ?? null, (previous) => {
+    const edition = editions.find(({ type }) => type === previous);
+
+    if (edition?.available === 0) {
+      toast.warning(`A edição ${editionLabels[edition.type]} esgotou.`);
+    }
+  });
 
   function handleSelectEdition(type: EditionType) {
     setSelectedType(type);
