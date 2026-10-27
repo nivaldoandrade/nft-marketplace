@@ -2,10 +2,11 @@ import type { Network } from '@/app/types/Nft';
 import { type Quote, type QuoteIssue, QuoteIssueType } from '@/app/types/Quote';
 import { addEth, compareEth, multiplyEth, percentOfEth, subtractEth } from '@/app/utils/eth';
 import { QUOTE_DURATION_MS } from '@/mocks/config';
-import { db, nextId } from '@/mocks/db';
+import { db } from '@/mocks/db';
 import type { CartRecord } from '@/mocks/db/types';
 import { findCoupon, isCouponExpired } from '@/mocks/domain/cart';
 import { getEdition } from '@/mocks/domain/nfts';
+import { hashSeed } from '@/mocks/utils/random';
 
 export const networkFees: Record<Network, string> = {
   ethereum: '0.016',
@@ -73,9 +74,21 @@ export function buildQuote(cart: CartRecord, network: Network): Quote {
   const networkFee = purchasable.length ? networkFees[network] : '0';
   const total = addEth(subtractEth(subtotal, discount), networkFee);
   const now = Date.now();
+  const content = {
+    cartVersion: cart.version,
+    network,
+    items,
+    coupon,
+    subtotal,
+    discount,
+    networkFee,
+    total,
+    issues,
+  };
 
   const quote: Quote = {
-    id: nextId('quo'),
+    // the id reflects the quoted values, so an order can check that nothing changed since the review
+    id: `quo_${hashSeed(JSON.stringify(content)).toString(36)}`,
     cartVersion: cart.version,
     network,
     items,

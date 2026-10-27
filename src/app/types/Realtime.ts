@@ -1,8 +1,10 @@
 import type { NftEdition } from '@/app/types/Nft';
+import type { Order } from '@/app/types/Order';
 import type { ValueOf } from '@/app/utils/ValueOf';
 
 export const RealtimeEventType = {
   NFT_UPDATED: 'nft.updated',
+  ORDER_UPDATED: 'order.updated',
 } as const;
 
 export type RealtimeEventType = ValueOf<typeof RealtimeEventType>;
@@ -23,3 +25,5 @@ export type NftUpdatedData = {
 };
 
 export type NftUpdatedEvent = RealtimeEvent<'nft.updated', 'nft', NftUpdatedData>;
+
+export type OrderUpdatedEvent = RealtimeEvent<'order.updated', 'order', Order>;

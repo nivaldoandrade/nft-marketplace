@@ -14,6 +14,11 @@ export type ScenarioConfig = {
   realtimeAuto: boolean;
   realtimeDuplicates: boolean;
   realtimeUnstable: boolean;
+  walletRejected: boolean;
+  paymentDeclined: boolean;
+  priceChangeOnCheckout: boolean;
+  soldOutOnCheckout: boolean;
+  orderTimeout: boolean;
 };
 
 export type Scenario = {
@@ -34,6 +39,11 @@ const defaultConfig: ScenarioConfig = {
   realtimeAuto: true,
   realtimeDuplicates: false,
   realtimeUnstable: false,
+  walletRejected: false,
+  paymentDeclined: false,
+  priceChangeOnCheckout: false,
+  soldOutOnCheckout: false,
+  orderTimeout: false,
 };
 
 export const scenarios: Scenario[] = [
@@ -65,6 +75,23 @@ export const scenarios: Scenario[] = [
     label: 'Conexão em tempo real instável',
     config: { realtimeUnstable: true },
   },
+  { id: 'wallet-rejected', label: 'Carteira recusa a conexão', config: { walletRejected: true } },
+  { id: 'payment-declined', label: 'Pagamento recusado', config: { paymentDeclined: true } },
+  {
+    id: 'price-change-on-checkout',
+    label: 'Preço muda ao enviar o pedido',
+    config: { priceChangeOnCheckout: true },
+  },
+  {
+    id: 'sold-out-on-checkout',
+    label: 'Edição esgota ao enviar o pedido',
+    config: { soldOutOnCheckout: true },
+  },
+  {
+    id: 'order-timeout',
+    label: 'Timeout após criar o pedido',
+    config: { orderTimeout: true },
+  },
 ];
 
 function readInitialScenarioIds(): string[] {
@@ -88,4 +115,17 @@ export function getScenarioConfig(): ScenarioConfig {
     }),
     defaultConfig,
   );
+}
+
+const consumed = new Set<string>();
+
+// one-shot failures happen once per page load, so the retry can succeed
+export function consumeOnce(key: string) {
+  if (consumed.has(key)) {
+    return false;
+  }
+
+  consumed.add(key);
+
+  return true;
 }

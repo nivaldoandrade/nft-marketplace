@@ -2,6 +2,7 @@ import { MOCK_DB_KEY, MOCK_DB_VERSION } from '@/mocks/config';
 import type { MockDb } from '@/mocks/db/types';
 import { createNftFixtures } from '@/mocks/fixtures/nfts';
 import { favoriteFixtures, userFixtures } from '@/mocks/fixtures/users';
+import { walletFixtures } from '@/mocks/fixtures/wallets';
 
 function createSeed(): MockDb {
   return {
@@ -12,6 +13,10 @@ function createSeed(): MockDb {
     sessions: {},
     favorites: structuredClone(favoriteFixtures),
     carts: {},
+    wallets: structuredClone(walletFixtures),
+    walletConnections: {},
+    orders: {},
+    idempotency: {},
   };
 }
 

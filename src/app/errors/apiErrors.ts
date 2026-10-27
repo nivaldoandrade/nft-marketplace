@@ -23,6 +23,9 @@ export const ErrorCode = {
   QUOTE_OUTDATED: 'QUOTE_OUTDATED',
   IDEMPOTENCY_CONFLICT: 'IDEMPOTENCY_CONFLICT',
   WALLET_NOT_FOUND: 'WALLET_NOT_FOUND',
+  WALLET_REJECTED: 'WALLET_REJECTED',
+  WALLET_NOT_CONNECTED: 'WALLET_NOT_CONNECTED',
+  CART_EMPTY: 'CART_EMPTY',
 
   // HTTP / Network
   BAD_REQUEST: 'BAD_REQUEST',
@@ -60,6 +63,9 @@ export const ApiErrorMessages: Record<ErrorCode, string> = {
   QUOTE_OUTDATED: 'Os valores do pedido mudaram. Revise antes de confirmar.',
   IDEMPOTENCY_CONFLICT: 'Este pedido já foi enviado com dados diferentes.',
   WALLET_NOT_FOUND: 'Carteira não encontrada.',
+  WALLET_REJECTED: 'A conexão foi recusada na carteira.',
+  WALLET_NOT_CONNECTED: 'Conecte a carteira para finalizar a compra.',
+  CART_EMPTY: 'Seu carrinho está vazio.',
   BAD_REQUEST: 'Requisição inválida.',
   INTERNAL_SERVER_ERROR: 'Erro interno. Tente novamente mais tarde.',
   SERVICE_UNAVAILABLE: 'Serviço indisponível no momento. Tente novamente em instantes.',
@@ -98,6 +104,16 @@ export function getApiErrorFields(error: unknown): Record<string, string> | unde
   }
 
   return error.response?.data?.error?.fields;
+}
+
+// extra data sent with an error, like the updated quote of a QUOTE_OUTDATED response
+export function getApiErrorDetail<T>(error: unknown, key: string): T | undefined {
+  if (!isAxiosError<ApiError>(error)) {
+    return undefined;
+  }
+
+  return (error.response?.data?.error as Record<string, unknown> | undefined)?.[key] as
+    T | undefined;
 }
 
 export function isTransientError(error: unknown): boolean {

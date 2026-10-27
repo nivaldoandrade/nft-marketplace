@@ -2,10 +2,12 @@ import { toSocketIo } from '@mswjs/socket.io-binding';
 import { type WebSocketHandlerConnection, ws } from 'msw';
 
 import { getSocketOrigin } from '@/app/config/socket';
+import { db } from '@/mocks/db';
 import { getScenarioConfig } from '@/mocks/scenarios';
 
 type RealtimeClient = {
   io: ReturnType<typeof toSocketIo>;
+  userId: string | null;
   close: () => void;
 };
 
@@ -34,6 +36,25 @@ function refuseConnection(rawClient: WebSocketHandlerConnection['client']) {
   rawClient.close(1011, 'unavailable');
 }
 
+function getUserId(token: unknown) {
+  const session = typeof token === 'string' ? db.sessions[token] : undefined;
+
+  return session && session.expiresAt > Date.now() ? session.userId : null;
+}
+
+// the binding acknowledges the namespace itself, so the auth payload is read from the client CONNECT packet
+function readHandshakeToken(data: unknown) {
+  if (typeof data !== 'string' || !data.startsWith('40')) {
+    return undefined;
+  }
+
+  try {
+    return (JSON.parse(data.slice(2) || '{}') as { token?: unknown }).token;
+  } catch {
+    return undefined;
+  }
+}
+
 function notifyConnectionCount() {
   connectionListeners.forEach((listener) => listener(clients.size));
 }
@@ -55,8 +76,17 @@ function handleConnection({ client: rawClient, server, params, info }: WebSocket
 
   const client: RealtimeClient = {
     io,
+    userId: null,
     close: () => rawClient.close(),
   };
+
+  rawClient.addEventListener('message', (event) => {
+    const token = readHandshakeToken(event.data);
+
+    if (token !== undefined) {
+      client.userId = getUserId(token);
+    }
+  });
 
   // engine.io expects server pings, otherwise the client drops the connection after pingInterval + pingTimeout
   timers.push(setInterval(() => rawClient.send('2'), HEARTBEAT_MS));
@@ -85,6 +115,15 @@ export const realtimeConnectionHandler = realtimeLink.addEventListener(
 
 export function broadcast(event: string, payload: unknown) {
   clients.forEach((client) => client.io.client.emit(event, payload));
+}
+
+// private events only reach the connections authenticated as their owner
+export function emitToUser(userId: string, event: string, payload: unknown) {
+  clients.forEach((client) => {
+    if (client.userId === userId) {
+      client.io.client.emit(event, payload);
+    }
+  });
 }
 
 // downtimeMs keeps refusing new connections, so the client stays in the reconnecting state
