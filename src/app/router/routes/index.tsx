@@ -1,3 +1,4 @@
+import { noop } from '@tanstack/react-query';
 import { createFileRoute, stripSearchParams } from '@tanstack/react-router';
 
 import { featuredNftsQueryOptions } from '@/app/hooks/queries/nfts/useFeaturedNfts';
@@ -12,8 +13,8 @@ export const Route = createFileRoute('/')({
   },
   loaderDeps: ({ search }) => search,
   loader: ({ context, deps }) => {
-    context.queryClient.prefetchQuery(listNftsQueryOptions(toListParams(deps)));
-    context.queryClient.prefetchQuery(featuredNftsQueryOptions());
+    context.queryClient.query(listNftsQueryOptions(toListParams(deps))).catch(noop);
+    context.queryClient.query(featuredNftsQueryOptions()).catch(noop);
   },
   component: Home,
 });
