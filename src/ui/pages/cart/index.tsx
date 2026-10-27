@@ -28,6 +28,7 @@ export function Cart() {
     hasBlockingIssues,
     handleChangeQuantity,
     handleRemove,
+    checkoutLabel,
     handleCheckout,
   } = useCartPage();
 
@@ -117,6 +118,7 @@ export function Cart() {
             isPending={isPending || isQuotePending}
             isUpdating={isQuoteFetching && !isQuotePending}
             hasBlockingIssues={hasBlockingIssues}
+            checkoutLabel={checkoutLabel}
             onCheckout={handleCheckout}
           />
         </div>

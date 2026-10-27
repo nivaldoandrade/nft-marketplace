@@ -1,25 +1,22 @@
-import { useAuth } from '@/app/contexts/AuthContext/useAuth';
+import { useNavigate } from '@tanstack/react-router';
+
 import { getErrorMessage, getApiErrorCode } from '@/app/errors/apiErrors';
 import { useRemoveCartItem, useUpdateCartItem } from '@/app/hooks/mutations/cart/useCartActions';
 import { useCart } from '@/app/hooks/queries/cart/useCart';
 import { useCartQuote } from '@/app/hooks/queries/cart/useCartQuote';
+import { useWallets } from '@/app/hooks/queries/wallets/useWallets';
 import { toast } from '@/app/libs/toast';
-import { AuthMode } from '@/app/router/authSearch';
 import type { CartItem } from '@/app/types/Cart';
 import { compareEth } from '@/app/utils/eth';
-import { useAuthModal } from '@/ui/hooks/useAuthModal';
 import { useValueChange } from '@/ui/hooks/useValueChange';
 import { isBlockingIssue } from '@/ui/pages/cart/components/itemIssueMessage';
 import { formatPrice } from '@/ui/utils/formatPrice';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
 export function getItemMaxQuantity(item: CartItem) {
   return Math.max(Math.min(item.available, item.maxPerOrder), 1);
 }
 
 export function useCartPage() {
-  const { isSignedIn } = useAuth();
-  const { open: openAuthModal } = useAuthModal();
   const { items, itemsCount, isPending, isError, isEmpty, refetch } = useCart();
   const {
     quote,
@@ -28,6 +25,8 @@ export function useCartPage() {
   } = useCartQuote({
     enabled: items.length > 0,
   });
+  const { connection } = useWallets();
+  const navigate = useNavigate();
   const { updateCartItem } = useUpdateCartItem();
   const { removeCartItem } = useRemoveCartItem();
 
@@ -71,13 +70,9 @@ export function useCartPage() {
       .catch(notifyError);
   }
 
+  // signed-out collectors go through the login modal and come back to the payment
   function handleCheckout() {
-    if (!isSignedIn) {
-      openAuthModal(AuthMode.SIGN_IN);
-      return;
-    }
-
-    notifyUnavailable('O pagamento');
+    navigate({ to: '/pagamento' });
   }
 
   return {
@@ -94,6 +89,7 @@ export function useCartPage() {
     hasBlockingIssues,
     handleChangeQuantity,
     handleRemove,
+    checkoutLabel: connection ? 'Finalizar compra' : 'Conectar e finalizar',
     handleCheckout,
   };
 }

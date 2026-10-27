@@ -10,7 +10,8 @@ import { AuthDialog } from '@/ui/pages/auth';
 export function AppLayout() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const isNftDetails = pathname.startsWith('/nft/');
-  const hidesMobileNav = isNftDetails || pathname === '/carrinho';
+  const isCheckout = pathname === '/pagamento';
+  const hidesMobileNav = isNftDetails || isCheckout || pathname === '/carrinho';
 
   return (
     <>
@@ -28,9 +29,11 @@ export function AppLayout() {
         className={
           isNftDetails
             ? 'pb-[calc(10.5rem+env(safe-area-inset-bottom))] md:pb-6'
-            : hidesMobileNav
-              ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]'
-              : undefined
+            : isCheckout
+              ? 'pb-[calc(8.5rem+env(safe-area-inset-bottom))] md:pb-6'
+              : hidesMobileNav
+                ? 'pb-[calc(1.5rem+env(safe-area-inset-bottom))]'
+                : undefined
         }
       />
       {!hidesMobileNav && <MobileNav />}

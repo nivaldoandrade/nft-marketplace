@@ -13,6 +13,7 @@ type CartSummaryProps = {
   isPending: boolean;
   isUpdating: boolean;
   hasBlockingIssues: boolean;
+  checkoutLabel: string;
   onCheckout: () => void;
 };
 
@@ -24,6 +25,7 @@ export function CartSummary({
   isPending,
   isUpdating,
   hasBlockingIssues,
+  checkoutLabel,
   onCheckout,
 }: CartSummaryProps) {
   const value = (amount: string | undefined, className?: string) =>
@@ -97,7 +99,7 @@ export function CartSummary({
             disabled={hasBlockingIssues || isPending}
             className="h-[60px] rounded-[40px] bg-linear-to-br from-primary to-primary/80 text-base font-bold text-primary-foreground pressable disabled:cursor-not-allowed disabled:opacity-50 md:h-10 md:rounded-[3px] md:bg-primary md:bg-none md:text-[15px] md:hover:bg-accent"
           >
-            Conectar e finalizar
+            {checkoutLabel}
           </button>
           <Link
             to="/"

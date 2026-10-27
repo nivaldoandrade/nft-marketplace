@@ -1,4 +1,5 @@
 import type { EditionType, Network, NftCategory, NftSort, NftTab } from '@/app/types/Nft';
+import type { WalletProvider } from '@/app/types/Wallet';
 
 export const categoryLabels: Record<NftCategory, string> = {
   'digital-art': 'Arte digital',
@@ -36,4 +37,10 @@ export const editionLabels: Record<EditionType, string> = {
   '1/10': '1/10',
   '1/50': '1/50',
   open: 'ABERTA',
+};
+
+export const walletProviderLabels: Record<WalletProvider, string> = {
+  walletconnect: 'WalletConnect',
+  metamask: 'MetaMask',
+  coinbase: 'Coinbase Wallet',
 };
