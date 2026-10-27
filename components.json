@@ -16,6 +16,5 @@
     "utils": "@/ui/utils/cn",
     "lib": "@/app/libs",
     "hooks": "@/ui/hooks"
-  },
-  "iconLibrary": "lucide"
+  }
 }

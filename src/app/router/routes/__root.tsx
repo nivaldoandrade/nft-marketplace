@@ -1,6 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query';
-import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext } from '@tanstack/react-router';
 
+import { AppLayout } from '@/ui/components/AppLayout';
 import { NotFound } from '@/ui/pages/notFound';
 
 export interface IRouterContext {
@@ -8,6 +9,6 @@ export interface IRouterContext {
 }
 
 export const Route = createRootRouteWithContext<IRouterContext>()({
-  component: Outlet,
+  component: AppLayout,
   notFoundComponent: NotFound,
 });
