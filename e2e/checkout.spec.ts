@@ -6,9 +6,10 @@ test.describe('compra', () => {
   test('do catálogo ao recibo confirmado', async ({ app, page }) => {
     await app.signIn();
     await page.goto('/');
+    const name = await page.locator('article h3').first().innerText();
     await page.locator('article a').first().click();
     await expect(page).toHaveURL(/\/nft\//);
-    const name = await page.getByRole('heading', { level: 1 }).innerText();
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(name);
 
     await app.addToCart(page.url().split('/nft/')[1]);
     await page.goto('/carrinho');
