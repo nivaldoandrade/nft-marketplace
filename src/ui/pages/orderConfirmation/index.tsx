@@ -5,6 +5,7 @@ import { formatEth } from '@/app/utils/eth';
 import { Container } from '@/ui/components/Container';
 import { CloseIcon, ThankYouIcon, WarningIcon } from '@/ui/components/Icons';
 import { Skeleton } from '@/ui/components/ui/skeleton';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import {
   explorerNames,
   useOrderConfirmation,
@@ -23,6 +24,7 @@ const secondaryButtonClassName =
   'flex h-12 items-center justify-center rounded-[5px] border border-border px-4 text-base font-bold hover:border-primary';
 
 export function OrderConfirmation() {
+  usePageTitle('Confirmação do pedido');
   const { order, isPending, isError, isNotFound, isForbidden, refetch, handleOpenExplorer } =
     useOrderConfirmation();
 

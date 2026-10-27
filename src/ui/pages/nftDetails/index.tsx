@@ -2,6 +2,7 @@ import { getRouteApi } from '@tanstack/react-router';
 
 import { Breadcrumb } from '@/ui/components/Breadcrumb';
 import { Container } from '@/ui/components/Container';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import { MobileBuyBar } from '@/ui/pages/nftDetails/components/MobileBuyBar';
 import { NftDetailsFeedback } from '@/ui/pages/nftDetails/components/NftDetailsFeedback';
 import { NftDetailsSkeleton } from '@/ui/pages/nftDetails/components/NftDetailsSkeleton';
@@ -44,6 +45,8 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
     handleBuy,
     handleAddToCart,
   } = useNftDetails(nftId);
+
+  usePageTitle(isNotFound ? 'NFT não encontrado' : nft?.name);
 
   return (
     <Container className="md:pt-8">

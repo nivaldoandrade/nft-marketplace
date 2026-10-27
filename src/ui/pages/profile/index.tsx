@@ -4,12 +4,14 @@ import { EnsDomainSelect } from '@/ui/components/EnsDomainSelect';
 import { FormField } from '@/ui/components/FormField';
 import { fieldInputClassName } from '@/ui/components/FormField/styles';
 import { Skeleton } from '@/ui/components/ui/skeleton';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import { AvatarField } from '@/ui/pages/profile/components/AvatarField';
 import { PasswordField } from '@/ui/pages/profile/components/PasswordField';
 import { useProfilePage } from '@/ui/pages/profile/useProfilePage';
 import { cn } from '@/ui/utils/cn';
 
 export function Profile() {
+  usePageTitle('Dados do perfil');
   const { profile, isPending, isError, refetch } = useProfile();
 
   if (isError) {

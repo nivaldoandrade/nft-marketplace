@@ -1,6 +1,7 @@
 import { useAuth } from '@/app/contexts/AuthContext/useAuth';
 import { WalletSlot } from '@/app/types/Wallet';
 import { Skeleton } from '@/ui/components/ui/skeleton';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import { WalletForm } from '@/ui/pages/wallets/components/WalletForm';
 import { useWalletsPage } from '@/ui/pages/wallets/useWalletsPage';
 import { cn } from '@/ui/utils/cn';
@@ -8,6 +9,7 @@ import { cn } from '@/ui/utils/cn';
 const linkButtonClassName = 'text-base leading-4 font-medium text-accent hover:underline';
 
 export function Wallets() {
+  usePageTitle('Carteiras');
   const { user } = useAuth();
   const {
     primary,

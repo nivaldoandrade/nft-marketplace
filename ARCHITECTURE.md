@@ -158,6 +158,7 @@ Seguem o mesmo padrão visual do Figma, como pede o enunciado.
 - **Recuo da rolagem:** o recuo para o header fixo fica nas seções de destino (`scroll-margin`), e não no `html` (`scroll-padding`), que fazia a página subir a cada tecla digitada no campo do header.
 - **Compartilhar (detalhe):** LinkedIn, e-mail e X abrem os links reais de compartilhamento com a URL do NFT (nova aba; e-mail via `mailto:`).
 - **Cursor:** o Tailwind v4 removeu o `cursor: pointer` padrão dos botões; a regra foi restaurada globalmente para botões habilitados, e o slider usa `grab`/`grabbing`.
+- **Título da aba:** cada página define o próprio título (`usePageTitle`), como "Emerald Ape #042 | Kurio", "Carrinho | Kurio" ou "Página não encontrada | Kurio"; o início usa "Kurio | Marketplace de NFTs", que também é o título do `index.html` antes de o JavaScript carregar. Isso identifica a página para leitores de tela, no histórico e nas abas (WCAG 2.4.2).
 - **Retorno ao toque:** utilitário `pressable` (opacidade ao pressionar, sem realce cinza do iOS e sem seleção de texto) nos botões principais.
 
 ### Tratamento de falhas

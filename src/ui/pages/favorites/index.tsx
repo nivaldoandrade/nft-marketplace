@@ -2,12 +2,14 @@ import { Link } from '@tanstack/react-router';
 
 import { useFavorites } from '@/app/hooks/queries/favorites/useFavorites';
 import { NftCard, NftCardSkeleton } from '@/ui/components/NftCard';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import { FavoriteRemoveButton } from '@/ui/pages/favorites/components/FavoriteRemoveButton';
 import { CATALOG_SECTION_ID } from '@/ui/utils/sections';
 
 const gridClassName = 'grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-3 md:gap-x-7 md:gap-y-8';
 
 export function Favorites() {
+  usePageTitle('Lista de interesse');
   const { favorites, isPending, isError, refetch } = useFavorites();
 
   return (

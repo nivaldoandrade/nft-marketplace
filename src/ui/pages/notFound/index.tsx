@@ -1,8 +1,10 @@
 import { Link } from '@tanstack/react-router';
 
 import { Container } from '@/ui/components/Container';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 
 export function NotFound() {
+  usePageTitle('Página não encontrada');
   return (
     <Container className="flex min-h-[60dvh] flex-col items-center justify-center gap-4 py-16 text-center">
       <p className="text-sm font-medium tracking-[0.1em] text-accent">ERRO 404</p>

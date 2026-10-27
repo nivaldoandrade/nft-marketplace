@@ -13,6 +13,7 @@ import { Breadcrumb } from '@/ui/components/Breadcrumb';
 import { Container } from '@/ui/components/Container';
 import { ArrowLeftIcon } from '@/ui/components/Icons';
 import { Skeleton } from '@/ui/components/ui/skeleton';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import { CheckoutTotals } from '@/ui/pages/checkout/components/CheckoutTotals';
 import { CollectorForm } from '@/ui/pages/checkout/components/CollectorForm';
 import { OrderItems } from '@/ui/pages/checkout/components/OrderItems';
@@ -25,6 +26,7 @@ import { formatPrice } from '@/ui/utils/formatPrice';
 import { walletProviderLabels } from '@/ui/utils/labels';
 
 export function Checkout() {
+  usePageTitle('Pagamento');
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const { user } = useAuth();

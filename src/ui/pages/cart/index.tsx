@@ -3,6 +3,7 @@ import { Link, useCanGoBack, useRouter } from '@tanstack/react-router';
 import { Breadcrumb } from '@/ui/components/Breadcrumb';
 import { Container } from '@/ui/components/Container';
 import { ArrowLeftIcon } from '@/ui/components/Icons';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 import { AlsoViewed } from '@/ui/pages/cart/components/AlsoViewed';
 import { CartItemCard } from '@/ui/pages/cart/components/CartItemCard';
 import { CartSkeleton } from '@/ui/pages/cart/components/CartSkeleton';
@@ -12,6 +13,7 @@ import { useCartPage } from '@/ui/pages/cart/useCartPage';
 import { CATALOG_SECTION_ID } from '@/ui/utils/sections';
 
 export function Cart() {
+  usePageTitle('Carrinho');
   const router = useRouter();
   const canGoBack = useCanGoBack();
   const {

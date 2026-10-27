@@ -3,8 +3,10 @@ import { type ErrorComponentProps, Link, useRouter } from '@tanstack/react-route
 
 import { queryKeys } from '@/app/libs/queryKeys';
 import { Container } from '@/ui/components/Container';
+import { usePageTitle } from '@/ui/hooks/usePageTitle';
 
 export function RouteError({ reset }: ErrorComponentProps) {
+  usePageTitle('Erro');
   const router = useRouter();
   const queryClient = useQueryClient();
 
