@@ -10,6 +10,7 @@ export const ErrorCode = {
   FORBIDDEN: 'FORBIDDEN',
   RESOURCE_NOT_FOUND: 'RESOURCE_NOT_FOUND',
   EMAIL_ALREADY_IN_USE: 'EMAIL_ALREADY_IN_USE',
+  USERNAME_ALREADY_IN_USE: 'USERNAME_ALREADY_IN_USE',
   INVALID_PASSWORD: 'INVALID_PASSWORD',
 
   // Catalog / Cart
@@ -50,6 +51,7 @@ export const ApiErrorMessages: Record<ErrorCode, string> = {
   FORBIDDEN: 'Você não tem permissão para acessar este recurso.',
   RESOURCE_NOT_FOUND: 'Recurso não encontrado.',
   EMAIL_ALREADY_IN_USE: 'Este e-mail já está em uso.',
+  USERNAME_ALREADY_IN_USE: 'Este nome de usuário já está em uso.',
   INVALID_PASSWORD: 'Senha atual incorreta.',
   EDITION_UNAVAILABLE: 'Esta edição não está mais disponível.',
   QUANTITY_UNAVAILABLE: 'Quantidade indisponível para esta edição.',

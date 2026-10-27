@@ -9,6 +9,7 @@ export type ScenarioConfig = {
   serverError: 500 | 503 | null;
   flaky: boolean;
   emptyCatalog: boolean;
+  shortSession: boolean;
 };
 
 export type Scenario = {
@@ -24,6 +25,7 @@ const defaultConfig: ScenarioConfig = {
   serverError: null,
   flaky: false,
   emptyCatalog: false,
+  shortSession: false,
 };
 
 export const scenarios: Scenario[] = [
@@ -38,6 +40,7 @@ export const scenarios: Scenario[] = [
   { id: 'unavailable', label: 'Serviço indisponível (503)', config: { serverError: 503 } },
   { id: 'flaky', label: 'Falha na primeira tentativa', config: { flaky: true } },
   { id: 'empty-catalog', label: 'Catálogo vazio', config: { emptyCatalog: true } },
+  { id: 'short-session', label: 'Sessão curta (30s)', config: { shortSession: true } },
 ];
 
 function readInitialScenarioIds(): string[] {

@@ -12,3 +12,7 @@ export function apiError(
     { status },
   );
 }
+
+export function validationError(fields: Record<string, string>) {
+  return apiError(422, 'VALIDATION', { fields });
+}
