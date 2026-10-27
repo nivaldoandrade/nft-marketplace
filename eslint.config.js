@@ -87,7 +87,7 @@ export default tseslint.config(
           selector: 'interface',
           format: ['PascalCase'],
           filter: {
-            regex: '^(Register|ImportMeta|ImportMetaEnv)$',
+            regex: '^(Register|HistoryState|ImportMeta|ImportMetaEnv)$',
             match: false,
           },
           custom: {

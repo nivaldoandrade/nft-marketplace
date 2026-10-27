@@ -6,7 +6,7 @@ import { RouteError } from '@/ui/pages/routeError';
 
 export const router = createRouter({
   routeTree,
-  context: { queryClient },
+  context: { queryClient, auth: undefined! },
   defaultPreload: 'intent',
   defaultPreloadStaleTime: 0,
   scrollRestoration: true,
@@ -17,5 +17,9 @@ export const router = createRouter({
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
+  }
+
+  interface HistoryState {
+    openedAuthModal?: boolean;
   }
 }
