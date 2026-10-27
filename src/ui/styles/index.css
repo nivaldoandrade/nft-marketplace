@@ -97,6 +97,14 @@
     @apply bg-background font-sans text-foreground antialiased;
   }
 
+  /* Safari 26 tints its top bar with the body background color */
+  @media (width < 48rem) {
+    body:has([data-top-tint]) {
+      background-color: var(--card);
+      background-image: linear-gradient(var(--background), var(--background));
+    }
+  }
+
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;

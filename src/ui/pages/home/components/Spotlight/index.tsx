@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { useFeaturedNfts } from '@/app/hooks/queries/nfts/useFeaturedNfts';
 import { Skeleton } from '@/ui/components/ui/skeleton';
 import { getLargeImage } from '@/ui/utils/image';
@@ -24,15 +26,21 @@ export function Spotlight() {
       {isPending || !spotlight ? (
         <Skeleton className="h-[368px] w-full rounded-[22px]" />
       ) : (
-        <img
-          src={getLargeImage(spotlight.image)}
-          alt={`${spotlight.name}, coleção ${spotlight.collection.name}`}
-          width={800}
-          height={800}
-          loading="lazy"
-          decoding="async"
-          className="h-[368px] w-full rounded-[22px] object-cover"
-        />
+        <Link
+          to="/nft/$nftId"
+          params={{ nftId: spotlight.id }}
+          className="block rounded-[22px] transition-opacity hover:opacity-90"
+        >
+          <img
+            src={getLargeImage(spotlight.image)}
+            alt={`${spotlight.name}, coleção ${spotlight.collection.name}`}
+            width={800}
+            height={800}
+            loading="lazy"
+            decoding="async"
+            className="h-[368px] w-full rounded-[22px] object-cover"
+          />
+        </Link>
       )}
 
       <span

@@ -1,4 +1,4 @@
-import type { Network, NftCategory, NftSort, NftTab } from '@/app/types/Nft';
+import type { EditionType, Network, NftCategory, NftSort, NftTab } from '@/app/types/Nft';
 
 export const categoryLabels: Record<NftCategory, string> = {
   'digital-art': 'Arte digital',
@@ -29,4 +29,11 @@ export const sortLabels: Record<NftSort, string> = {
   'price-asc': 'Menor preço',
   'price-desc': 'Maior preço',
   name: 'Nome (A–Z)',
+};
+
+export const editionLabels: Record<EditionType, string> = {
+  '1/1': '1/1',
+  '1/10': '1/10',
+  '1/50': '1/50',
+  open: 'ABERTA',
 };

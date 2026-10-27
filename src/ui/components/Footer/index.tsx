@@ -12,6 +12,7 @@ import {
 } from '@/ui/components/Icons';
 import { Logo } from '@/ui/components/Logo';
 import { useCatalogLink } from '@/ui/hooks/useCatalogLink';
+import { cn } from '@/ui/utils/cn';
 import { categoryLabels } from '@/ui/utils/labels';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
@@ -63,11 +64,20 @@ const socialLinks = [
 const listTitleClassName = 'text-lg leading-4 font-bold';
 const listItemClassName = 'text-sm leading-[30px] text-foreground hover:text-accent';
 
-export function Footer() {
+type FooterProps = {
+  className?: string;
+};
+
+export function Footer({ className }: FooterProps) {
   const catalogLink = useCatalogLink();
 
   return (
-    <footer className="mt-16 pb-[calc(7rem+env(safe-area-inset-bottom))] md:mt-24 md:pb-6">
+    <footer
+      className={cn(
+        'mt-16 pb-[calc(7rem+env(safe-area-inset-bottom))] md:mt-24 md:pb-6',
+        className,
+      )}
+    >
       <Container>
         <section aria-label="Vantagens da Kurio" className="bg-card p-6 md:p-8 xl:pb-4">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-7 xl:grid-cols-[repeat(3,265px)_1fr] xl:gap-0">

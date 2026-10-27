@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { ArrowRightIcon } from '@/ui/components/Icons';
 import { Skeleton } from '@/ui/components/ui/skeleton';
 import { useHero } from '@/ui/pages/home/components/Hero/useHero';
@@ -77,17 +79,23 @@ export function Hero() {
             <Skeleton className="size-full rounded-2xl md:rounded-3xl" />
           ) : (
             <>
-              <img
-                key={activeSlide.id}
-                src={activeSlide.image.replace('-400.', '-800.')}
-                srcSet={getImageSrcSet(activeSlide.image)}
-                sizes="(min-width: 1280px) 450px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 138px"
-                alt={`${activeSlide.name}, coleção ${activeSlide.collection.name}`}
-                width={800}
-                height={800}
-                fetchPriority="high"
-                className="size-full rounded-2xl object-cover motion-safe:animate-in motion-safe:fade-in md:rounded-3xl"
-              />
+              <Link
+                to="/nft/$nftId"
+                params={{ nftId: activeSlide.id }}
+                className="block size-full rounded-2xl md:rounded-3xl"
+              >
+                <img
+                  key={activeSlide.id}
+                  src={activeSlide.image.replace('-400.', '-800.')}
+                  srcSet={getImageSrcSet(activeSlide.image)}
+                  sizes="(min-width: 1280px) 450px, (min-width: 1024px) 400px, (min-width: 768px) 320px, 138px"
+                  alt={`${activeSlide.name}, coleção ${activeSlide.collection.name}`}
+                  width={800}
+                  height={800}
+                  fetchPriority="high"
+                  className="size-full rounded-2xl object-cover motion-safe:animate-in motion-safe:fade-in md:rounded-3xl"
+                />
+              </Link>
               {secondarySlide && secondarySlide.id !== activeSlide.id && (
                 <img
                   src={secondarySlide.image}
