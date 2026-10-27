@@ -20,7 +20,16 @@ function createSeed(): MockDb {
   };
 }
 
+// ?reset-mocks discards the stored data and starts again from the fixtures
+function shouldReset() {
+  return new URLSearchParams(window.location.search).has('reset-mocks');
+}
+
 function load(): MockDb {
+  if (shouldReset()) {
+    return createSeed();
+  }
+
   try {
     const stored = localStorage.getItem(MOCK_DB_KEY);
 
@@ -39,6 +48,10 @@ function load(): MockDb {
 }
 
 export const db = load();
+
+if (shouldReset()) {
+  persist();
+}
 
 export function persist() {
   try {

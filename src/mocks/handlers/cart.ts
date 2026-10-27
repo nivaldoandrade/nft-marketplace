@@ -180,18 +180,6 @@ export const cartHandlers = [
     return respond(cart);
   }),
 
-  http.post(apiPath('/cart/acknowledge-prices'), ({ request }) => {
-    const cart = resolveCart(request);
-
-    cart.items = cart.items.map((item) => ({
-      ...item,
-      addedUnitPrice: db.nfts[item.nftId]?.price ?? item.addedUnitPrice,
-    }));
-    touchCart(cart);
-
-    return respond(cart);
-  }),
-
   http.put(apiPath('/cart/coupon'), async ({ request }) => {
     const body = await readJson<{ code: string }>(request);
     const code = typeof body.code === 'string' ? body.code.trim().toUpperCase() : '';
