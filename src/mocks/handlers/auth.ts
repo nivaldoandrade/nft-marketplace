@@ -61,6 +61,8 @@ export const authHandlers = [
       email,
       displayName: body.username!,
       avatarUrl: null,
+      ensName: '',
+      walletNickname: '',
       salt,
       passwordHash: await hashPassword(body.password!, salt),
       createdAt: new Date().toISOString(),

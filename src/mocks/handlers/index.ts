@@ -6,6 +6,7 @@ import { cartHandlers } from '@/mocks/handlers/cart';
 import { favoriteHandlers } from '@/mocks/handlers/favorites';
 import { nftHandlers } from '@/mocks/handlers/nfts';
 import { orderHandlers } from '@/mocks/handlers/orders';
+import { profileHandlers } from '@/mocks/handlers/profile';
 import { realtimeHandlers } from '@/mocks/handlers/realtime';
 import { walletHandlers } from '@/mocks/handlers/wallets';
 import { applyNetworkConditions } from '@/mocks/scenarios/network';
@@ -19,6 +20,7 @@ export const handlers = [
   ...favoriteHandlers,
   ...nftHandlers,
   ...orderHandlers,
+  ...profileHandlers,
   ...walletHandlers,
   ...realtimeHandlers,
 ];

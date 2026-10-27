@@ -5,3 +5,8 @@ export type User = {
   displayName: string;
   avatarUrl: string | null;
 };
+
+export type Profile = User & {
+  ensName: string;
+  walletNickname: string;
+};

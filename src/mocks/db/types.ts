@@ -10,6 +10,8 @@ export type UserRecord = {
   email: string;
   displayName: string;
   avatarUrl: string | null;
+  ensName: string;
+  walletNickname: string;
   salt: string;
   passwordHash: string;
   createdAt: string;
