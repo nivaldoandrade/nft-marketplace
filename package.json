@@ -14,6 +14,7 @@
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
     "lighthouse": "yarn build && node lighthouse/run.mjs",
+    "lighthouse:deploy": "LIGHTHOUSE_URL=https://kurio.nivaldoandrade.dev.br node lighthouse/run.mjs",
     "test:e2e:update": "playwright test --update-snapshots",
     "test:e2e:report": "playwright show-report",
     "prepare": "husky"

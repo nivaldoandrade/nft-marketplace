@@ -1,6 +1,7 @@
 // Runs Lighthouse three times per page and profile against the production build and keeps the median run
+// LIGHTHOUSE_URL measures a deployed URL instead, with reports in reports/deploy
 import { spawn } from 'node:child_process';
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,9 +11,10 @@ import lighthouse from 'lighthouse';
 import desktopConfig from 'lighthouse/core/config/desktop-config.js';
 
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
-const REPORTS_DIR = path.join(ROOT, 'reports');
+const DEPLOY_URL = process.env.LIGHTHOUSE_URL?.replace(/\/$/, '');
+const REPORTS_DIR = path.join(ROOT, 'reports', DEPLOY_URL ? 'deploy' : '');
 const PORT = 4318;
-const BASE_URL = `http://localhost:${PORT}`;
+const BASE_URL = DEPLOY_URL ?? `http://localhost:${PORT}`;
 const RUNS = 3;
 
 const pages = [
@@ -82,14 +84,15 @@ function formatMetric(label, value) {
   return label === 'CLS' ? value.toFixed(3) : `${Math.round(value)} ms`;
 }
 
-const preview = spawn('yarn', ['preview', '--port', String(PORT), '--strictPort'], {
-  cwd: path.join(ROOT, '..'),
-  stdio: 'ignore',
-});
+const preview = DEPLOY_URL
+  ? null
+  : spawn('yarn', ['preview', '--port', String(PORT), '--strictPort'], {
+      cwd: path.join(ROOT, '..'),
+      stdio: 'ignore',
+    });
 
 try {
   await waitForServer(BASE_URL);
-  await rm(REPORTS_DIR, { recursive: true, force: true });
   await mkdir(REPORTS_DIR, { recursive: true });
 
   const chrome = await chromeLauncher.launch({ chromeFlags: ['--headless=new'] });
@@ -146,7 +149,9 @@ try {
       os: `${os.type()} ${os.release()} (${os.arch()})`,
       cpu: os.cpus()[0]?.model,
       runsPerPage: RUNS,
-      server: 'vite preview do build de produção, mocks ativos no cenário padrão',
+      server: DEPLOY_URL
+        ? `${DEPLOY_URL} (deploy), mocks ativos no cenário padrão`
+        : 'vite preview do build de produção, mocks ativos no cenário padrão',
     };
 
     await writeFile(
@@ -181,5 +186,5 @@ try {
     await chrome.kill();
   }
 } finally {
-  preview.kill();
+  preview?.kill();
 }
