@@ -1,5 +1,13 @@
 import { Service } from '@/app/services/Service';
-import type { Network, NftCategory, NftSort, NftSummary, NftTab } from '@/app/types/Nft';
+import type {
+  Network,
+  Nft,
+  NftCategory,
+  NftReview,
+  NftSort,
+  NftSummary,
+  NftTab,
+} from '@/app/types/Nft';
 import type { Paginated } from '@/app/types/Pagination';
 
 export class NftsService extends Service {
@@ -23,6 +31,36 @@ export class NftsService extends Service {
     const { data } = await this.client.get<NftsService.FeaturedResponse>('nfts/featured', {
       signal,
     });
+
+    return data;
+  }
+
+  static async getById(nftId: string, signal?: AbortSignal): Promise<Nft> {
+    const { data } = await this.client.get<Nft>(`nfts/${encodeURIComponent(nftId)}`, { signal });
+
+    return data;
+  }
+
+  static async getRelated(
+    nftId: string,
+    signal?: AbortSignal,
+  ): Promise<NftsService.RelatedResponse> {
+    const { data } = await this.client.get<NftsService.RelatedResponse>(
+      `nfts/${encodeURIComponent(nftId)}/related`,
+      { signal },
+    );
+
+    return data;
+  }
+
+  static async getReviews(
+    nftId: string,
+    signal?: AbortSignal,
+  ): Promise<NftsService.ReviewsResponse> {
+    const { data } = await this.client.get<NftsService.ReviewsResponse>(
+      `nfts/${encodeURIComponent(nftId)}/reviews`,
+      { signal },
+    );
 
     return data;
   }
@@ -61,5 +99,13 @@ export namespace NftsService {
     hero: NftSummary[];
     spotlight: NftSummary | null;
     promos: NftSummary[];
+  };
+
+  export type RelatedResponse = {
+    items: NftSummary[];
+  };
+
+  export type ReviewsResponse = {
+    items: NftReview[];
   };
 }

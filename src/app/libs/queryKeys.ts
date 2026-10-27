@@ -8,6 +8,8 @@ export const queryKeys = {
     list: (params: NftsService.ListParams) => ['nfts', 'list', params] as const,
     featured: () => ['nfts', 'featured'] as const,
     detail: (nftId: string) => ['nfts', 'detail', nftId] as const,
+    related: (nftId: string) => ['nfts', 'detail', nftId, 'related'] as const,
+    reviews: (nftId: string) => ['nfts', 'detail', nftId, 'reviews'] as const,
   },
 
   user: (userId: string) => ({
