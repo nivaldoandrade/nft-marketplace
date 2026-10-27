@@ -4,6 +4,7 @@ import { useAuth } from '@/app/contexts/AuthContext/useAuth';
 import { AccountMenu } from '@/ui/components/AccountMenu';
 import { HeartIcon, HomeIcon, ScanIcon, ShopIcon, UserIcon } from '@/ui/components/Icons';
 import { useAuthModal } from '@/ui/hooks/useAuthModal';
+import { useOpenFavoritesPage } from '@/ui/hooks/useOpenFavoritesPage';
 import { cn } from '@/ui/utils/cn';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 import { SEARCH_INPUT_ID, scrollToCatalog } from '@/ui/utils/sections';
@@ -14,8 +15,10 @@ const itemClassName =
 export function MobileNav() {
   const pathname = useRouterState({ select: (state) => state.location.pathname });
   const isHome = pathname === '/';
+  const isFavoritesPage = pathname === '/perfil/lista-de-interesse';
   const { isSignedIn } = useAuth();
   const { open: openAuthModal } = useAuthModal();
+  const openFavoritesPage = useOpenFavoritesPage();
 
   function handleSearch() {
     const input = document.getElementById(SEARCH_INPUT_ID);
@@ -70,9 +73,14 @@ export function MobileNav() {
           </Link>
           <button
             type="button"
-            aria-label="Favoritos"
-            className={cn(itemClassName, 'left-[calc((50%-76px)*0.901-22px)]')}
-            onClick={() => notifyUnavailable('A lista de favoritos')}
+            aria-label="Lista de interesse"
+            aria-current={isFavoritesPage ? 'page' : undefined}
+            className={cn(
+              itemClassName,
+              'left-[calc((50%-76px)*0.901-22px)]',
+              isFavoritesPage && 'text-accent',
+            )}
+            onClick={openFavoritesPage}
           >
             <HeartIcon className="h-[18px] w-5" />
           </button>

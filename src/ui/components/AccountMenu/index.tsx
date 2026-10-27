@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { useAccountMenu } from '@/ui/components/AccountMenu/useAccountMenu';
 import {
   DropdownMenu,
@@ -35,8 +37,8 @@ export function AccountMenu({ side = 'bottom', children }: AccountMenuProps) {
         <DropdownMenuItem onSelect={() => handleUnavailable('A página de carteiras')}>
           Minhas carteiras
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => handleUnavailable('A lista de favoritos')}>
-          Favoritos
+        <DropdownMenuItem asChild>
+          <Link to="/perfil/lista-de-interesse">Lista de interesse</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={handleSignOut}>Sair</DropdownMenuItem>

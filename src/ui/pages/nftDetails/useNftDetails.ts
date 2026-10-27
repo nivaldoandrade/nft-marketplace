@@ -2,12 +2,14 @@ import { useState } from 'react';
 
 import { useGetNftById } from '@/app/hooks/queries/nfts/useGetNftById';
 import type { EditionType, NftEdition } from '@/app/types/Nft';
+import { useFavoriteAction } from '@/ui/hooks/useFavoriteAction';
 
 export const DETAILS_TAB = 'details';
 export const REVIEWS_TAB = 'reviews';
 
 export function useNftDetails(nftId: string) {
   const { nft, isPending, isError, isNotFound, refetch } = useGetNftById(nftId);
+  const { isFavorite, handleToggleFavorite } = useFavoriteAction(nft);
 
   const [selectedType, setSelectedType] = useState<EditionType | null>(null);
   const [requestedQuantity, setRequestedQuantity] = useState(1);
@@ -61,6 +63,8 @@ export function useNftDetails(nftId: string) {
     handleIncrease,
     handleDecrease,
     handleShowReviews,
+    isFavorite,
+    handleToggleFavorite,
   };
 }
 

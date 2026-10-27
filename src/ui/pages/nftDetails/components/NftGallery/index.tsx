@@ -1,6 +1,6 @@
 import { useRouter, useCanGoBack } from '@tanstack/react-router';
 
-import { ArrowLeftIcon, HeartOutlineIcon, SearchIcon } from '@/ui/components/Icons';
+import { ArrowLeftIcon, HeartIcon, HeartOutlineIcon, SearchIcon } from '@/ui/components/Icons';
 import {
   Dialog,
   DialogContent,
@@ -11,18 +11,25 @@ import {
 import { useNftGallery } from '@/ui/pages/nftDetails/components/NftGallery/useNftGallery';
 import { cn } from '@/ui/utils/cn';
 import { getImageSrcSet, getLargeImage } from '@/ui/utils/image';
-import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
 type NftGalleryProps = {
   name: string;
   collectionName: string;
   images: string[];
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 };
 
 const roundButtonClassName =
   'flex size-[35px] items-center justify-center rounded-full border border-border bg-secondary pressable hover:text-accent';
 
-export function NftGallery({ name, collectionName, images }: NftGalleryProps) {
+export function NftGallery({
+  name,
+  collectionName,
+  images,
+  isFavorite,
+  onToggleFavorite,
+}: NftGalleryProps) {
   const { activeIndex, mobileIndex, trackRef, setActiveIndex, handleTrackScroll, handleGoToSlide } =
     useNftGallery();
   const router = useRouter();
@@ -59,11 +66,18 @@ export function NftGallery({ name, collectionName, images }: NftGalleryProps) {
           </button>
           <button
             type="button"
-            onClick={() => notifyUnavailable('A lista de favoritos')}
-            aria-label="Favoritar"
+            onClick={onToggleFavorite}
+            aria-pressed={isFavorite}
+            aria-label={
+              isFavorite ? 'Remover da lista de interesse' : 'Adicionar à lista de interesse'
+            }
             className={cn(roundButtonClassName, 'text-accent')}
           >
-            <HeartOutlineIcon className="size-4" />
+            {isFavorite ? (
+              <HeartIcon className="h-[14px] w-4" />
+            ) : (
+              <HeartOutlineIcon className="size-4" />
+            )}
           </button>
         </div>
 

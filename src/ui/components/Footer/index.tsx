@@ -12,6 +12,7 @@ import {
 } from '@/ui/components/Icons';
 import { Logo } from '@/ui/components/Logo';
 import { useCatalogLink } from '@/ui/hooks/useCatalogLink';
+import { useOpenFavoritesPage } from '@/ui/hooks/useOpenFavoritesPage';
 import { cn } from '@/ui/utils/cn';
 import { categoryLabels } from '@/ui/utils/labels';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
@@ -70,6 +71,7 @@ type FooterProps = {
 
 export function Footer({ className }: FooterProps) {
   const catalogLink = useCatalogLink();
+  const openFavoritesPage = useOpenFavoritesPage();
 
   return (
     <footer
@@ -124,7 +126,11 @@ export function Footer({ className }: FooterProps) {
                   <button
                     type="button"
                     className={listItemClassName}
-                    onClick={() => notifyUnavailable(label)}
+                    onClick={() =>
+                      label === 'Lista de interesse'
+                        ? openFavoritesPage()
+                        : notifyUnavailable(label)
+                    }
                   >
                     {label}
                   </button>

@@ -1,7 +1,9 @@
 import { Link } from '@tanstack/react-router';
 
 import type { NftSummary } from '@/app/types/Nft';
+import { HeartIcon, HeartOutlineIcon } from '@/ui/components/Icons';
 import { Skeleton } from '@/ui/components/ui/skeleton';
+import { useFavoriteAction } from '@/ui/hooks/useFavoriteAction';
 import { cn } from '@/ui/utils/cn';
 import { formatPrice } from '@/ui/utils/formatPrice';
 
@@ -16,6 +18,8 @@ const mediaClassName =
   'relative flex aspect-[175/200] items-center justify-center rounded-[20px] bg-linear-to-br from-card to-secondary p-1 md:aspect-[258/300] md:rounded-none md:bg-card md:bg-none';
 
 export function NftCard({ nft, priority = false, compact = false, className }: NftCardProps) {
+  const { isFavorite, handleToggleFavorite } = useFavoriteAction(nft);
+
   return (
     <article
       className={cn(
@@ -29,16 +33,35 @@ export function NftCard({ nft, priority = false, compact = false, className }: N
             RARO
           </span>
         )}
-        <img
-          src={nft.image}
-          alt={`${nft.name}, coleção ${nft.collection.name}`}
-          width={400}
-          height={400}
-          loading={priority ? 'eager' : 'lazy'}
-          fetchPriority={priority ? 'high' : 'auto'}
-          decoding="async"
-          className="aspect-square w-full rounded-2xl object-cover md:rounded-[15px]"
-        />
+        <div className="relative w-full">
+          <img
+            src={nft.image}
+            alt={`${nft.name}, coleção ${nft.collection.name}`}
+            width={400}
+            height={400}
+            loading={priority ? 'eager' : 'lazy'}
+            fetchPriority={priority ? 'high' : 'auto'}
+            decoding="async"
+            className="aspect-square w-full rounded-2xl object-cover md:rounded-[15px]"
+          />
+          <button
+            type="button"
+            onClick={handleToggleFavorite}
+            aria-pressed={isFavorite}
+            aria-label={`${isFavorite ? 'Remover' : 'Adicionar'} ${nft.name} ${isFavorite ? 'da' : 'à'} lista de interesse`}
+            className={cn(
+              'absolute -top-[4.5px] right-1.5 z-10 flex size-7 items-center justify-center rounded-full border border-border bg-secondary text-primary pressable transition-opacity md:top-3 md:right-3',
+              !isFavorite &&
+                'pointer-fine:opacity-0 pointer-fine:group-hover:opacity-100 pointer-fine:group-has-[:focus-visible]:opacity-100',
+            )}
+          >
+            {isFavorite ? (
+              <HeartIcon className="h-[13px] w-[15px]" />
+            ) : (
+              <HeartOutlineIcon className="size-4" />
+            )}
+          </button>
+        </div>
       </div>
       <div
         className={cn(

@@ -3,6 +3,8 @@ import { useCallback } from 'react';
 
 import { AuthMode } from '@/app/router/authSearch';
 
+let afterSignIn: (() => void) | null = null;
+
 export function useAuthModal() {
   const router = useRouter();
   const navigate = useNavigate();
@@ -12,10 +14,14 @@ export function useAuthModal() {
   });
 
   const open = useCallback(
-    (nextMode: AuthMode = AuthMode.SIGN_IN) => {
+    (
+      nextMode: AuthMode = AuthMode.SIGN_IN,
+      options?: { afterSignIn?: () => void; redirect?: string },
+    ) => {
+      afterSignIn = options?.afterSignIn ?? null;
       navigate({
         to: '.',
-        search: (previous) => ({ ...previous, auth: nextMode }),
+        search: (previous) => ({ ...previous, auth: nextMode, redirect: options?.redirect }),
         state: (previous) => ({ ...previous, openedAuthModal: true }),
         resetScroll: false,
       });
@@ -37,6 +43,8 @@ export function useAuthModal() {
   );
 
   const close = useCallback(() => {
+    afterSignIn = null;
+
     if (openedFromApp) {
       router.history.back();
       return;
@@ -51,6 +59,10 @@ export function useAuthModal() {
   }, [navigate, openedFromApp, router]);
 
   const complete = useCallback(() => {
+    const pendingAction = afterSignIn;
+    afterSignIn = null;
+    pendingAction?.();
+
     if (redirect) {
       navigate({ href: redirect, replace: true });
       return;

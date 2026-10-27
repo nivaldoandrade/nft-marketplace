@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as NftNftIdRouteImport } from './routes/nft.$nftId'
+import { Route as PerfilIndexRouteImport } from './routes/perfil.index'
+import { Route as PerfilListaDeInteresseRouteImport } from './routes/perfil.lista-de-interesse'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,43 +32,88 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NftNftIdRoute = NftNftIdRouteImport.update({
   id: '/nft/$nftId',
   path: '/nft/$nftId',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilIndexRoute = PerfilIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PerfilRoute,
+} as any)
+const PerfilListaDeInteresseRoute = PerfilListaDeInteresseRouteImport.update({
+  id: '/lista-de-interesse',
+  path: '/lista-de-interesse',
+  getParentRoute: () => PerfilRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
+  '/perfil': typeof PerfilRouteWithChildren
   '/nft/$nftId': typeof NftNftIdRoute
+  '/perfil/lista-de-interesse': typeof PerfilListaDeInteresseRoute
+  '/perfil/': typeof PerfilIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
   '/nft/$nftId': typeof NftNftIdRoute
+  '/perfil/lista-de-interesse': typeof PerfilListaDeInteresseRoute
+  '/perfil': typeof PerfilIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cadastro': typeof CadastroRoute
   '/login': typeof LoginRoute
+  '/perfil': typeof PerfilRouteWithChildren
   '/nft/$nftId': typeof NftNftIdRoute
+  '/perfil/lista-de-interesse': typeof PerfilListaDeInteresseRoute
+  '/perfil/': typeof PerfilIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/cadastro' | '/login' | '/nft/$nftId'
+  fullPaths:
+    | '/'
+    | '/cadastro'
+    | '/login'
+    | '/perfil'
+    | '/nft/$nftId'
+    | '/perfil/lista-de-interesse'
+    | '/perfil/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/cadastro' | '/login' | '/nft/$nftId'
-  id: '__root__' | '/' | '/cadastro' | '/login' | '/nft/$nftId'
+  to:
+    | '/'
+    | '/cadastro'
+    | '/login'
+    | '/nft/$nftId'
+    | '/perfil/lista-de-interesse'
+    | '/perfil'
+  id:
+    | '__root__'
+    | '/'
+    | '/cadastro'
+    | '/login'
+    | '/perfil'
+    | '/nft/$nftId'
+    | '/perfil/lista-de-interesse'
+    | '/perfil/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CadastroRoute: typeof CadastroRoute
   LoginRoute: typeof LoginRoute
+  PerfilRoute: typeof PerfilRouteWithChildren
   NftNftIdRoute: typeof NftNftIdRoute
 }
 
@@ -92,6 +140,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nft/$nftId': {
       id: '/nft/$nftId'
       path: '/nft/$nftId'
@@ -99,13 +154,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NftNftIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/perfil/': {
+      id: '/perfil/'
+      path: '/'
+      fullPath: '/perfil/'
+      preLoaderRoute: typeof PerfilIndexRouteImport
+      parentRoute: typeof PerfilRoute
+    }
+    '/perfil/lista-de-interesse': {
+      id: '/perfil/lista-de-interesse'
+      path: '/lista-de-interesse'
+      fullPath: '/perfil/lista-de-interesse'
+      preLoaderRoute: typeof PerfilListaDeInteresseRouteImport
+      parentRoute: typeof PerfilRoute
+    }
   }
 }
+
+interface PerfilRouteChildren {
+  PerfilListaDeInteresseRoute: typeof PerfilListaDeInteresseRoute
+  PerfilIndexRoute: typeof PerfilIndexRoute
+}
+
+const PerfilRouteChildren: PerfilRouteChildren = {
+  PerfilListaDeInteresseRoute: PerfilListaDeInteresseRoute,
+  PerfilIndexRoute: PerfilIndexRoute,
+}
+
+const PerfilRouteWithChildren =
+  PerfilRoute._addFileChildren(PerfilRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CadastroRoute: CadastroRoute,
   LoginRoute: LoginRoute,
+  PerfilRoute: PerfilRouteWithChildren,
   NftNftIdRoute: NftNftIdRoute,
 }
 export const routeTree = rootRouteImport

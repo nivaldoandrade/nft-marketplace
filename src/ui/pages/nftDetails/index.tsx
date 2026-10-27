@@ -38,6 +38,8 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
     handleIncrease,
     handleDecrease,
     handleShowReviews,
+    isFavorite,
+    handleToggleFavorite,
   } = useNftDetails(nftId);
 
   return (
@@ -69,7 +71,13 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
       ) : (
         <>
           <div className="flex flex-col md:mt-3 md:grid md:grid-cols-2 md:gap-8 lg:grid-cols-[minmax(0,573fr)_minmax(0,595fr)]">
-            <NftGallery name={nft.name} collectionName={nft.collection.name} images={nft.gallery} />
+            <NftGallery
+              name={nft.name}
+              collectionName={nft.collection.name}
+              images={nft.gallery}
+              isFavorite={isFavorite}
+              onToggleFavorite={handleToggleFavorite}
+            />
             <NftInfo
               nft={nft}
               selectedEdition={selectedEdition?.type}
@@ -81,8 +89,10 @@ function NftDetailsContent({ nftId }: { nftId: string }) {
                 maxQuantity={maxQuantity}
                 isSoldOut={isSoldOut}
                 quantityLimitMessage={quantityLimitMessage}
+                isFavorite={isFavorite}
                 onIncrease={handleIncrease}
                 onDecrease={handleDecrease}
+                onToggleFavorite={handleToggleFavorite}
               />
             </NftInfo>
           </div>

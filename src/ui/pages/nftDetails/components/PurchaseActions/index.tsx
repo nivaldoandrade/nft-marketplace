@@ -1,4 +1,4 @@
-import { HeartOutlineIcon } from '@/ui/components/Icons';
+import { HeartIcon, HeartOutlineIcon } from '@/ui/components/Icons';
 import { QuantityStepper } from '@/ui/pages/nftDetails/components/QuantityStepper';
 import { notifyUnavailable } from '@/ui/utils/notifyUnavailable';
 
@@ -7,8 +7,10 @@ type PurchaseActionsProps = {
   maxQuantity: number;
   isSoldOut: boolean;
   quantityLimitMessage: string | null;
+  isFavorite: boolean;
   onIncrease: () => void;
   onDecrease: () => void;
+  onToggleFavorite: () => void;
 };
 
 export function PurchaseActions({
@@ -16,8 +18,10 @@ export function PurchaseActions({
   maxQuantity,
   isSoldOut,
   quantityLimitMessage,
+  isFavorite,
   onIncrease,
   onDecrease,
+  onToggleFavorite,
 }: PurchaseActionsProps) {
   return (
     <div className="hidden flex-col gap-2 md:flex">
@@ -40,11 +44,16 @@ export function PurchaseActions({
           </button>
           <button
             type="button"
-            onClick={() => notifyUnavailable('A lista de favoritos')}
+            onClick={onToggleFavorite}
+            aria-pressed={isFavorite}
             className="flex h-10 w-[130px] items-center justify-center gap-2 rounded-md border border-primary text-sm font-medium text-accent pressable hover:bg-primary/10"
           >
-            <HeartOutlineIcon className="size-5" />
-            Favoritar
+            {isFavorite ? (
+              <HeartIcon className="h-[18px] w-5" />
+            ) : (
+              <HeartOutlineIcon className="size-5" />
+            )}
+            {isFavorite ? 'Favoritado' : 'Favoritar'}
           </button>
         </div>
       </div>
