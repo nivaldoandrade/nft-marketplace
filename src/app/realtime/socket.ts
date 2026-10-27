@@ -1,10 +1,11 @@
 import { io, type Socket } from 'socket.io-client';
 
 import { getSocketOrigin, SOCKET_PATH } from '@/app/config/socket';
-import type { NftUpdatedEvent } from '@/app/types/Realtime';
+import type { NftUpdatedEvent, OrderUpdatedEvent } from '@/app/types/Realtime';
 
 interface IServerToClientEvents {
   'nft.updated': (event: NftUpdatedEvent) => void;
+  'order.updated': (event: OrderUpdatedEvent) => void;
 }
 
 export type RealtimeSocket = Socket<IServerToClientEvents>;

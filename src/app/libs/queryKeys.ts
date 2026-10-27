@@ -1,4 +1,5 @@
 import type { NftsService } from '@/app/services/NftsService';
+import type { OrdersService } from '@/app/services/OrdersService';
 
 export const queryKeys = {
   session: () => ['session'] as const,
@@ -26,7 +27,9 @@ export const queryKeys = {
     quote: (params: object) => ['user', userId, 'quote', params] as const,
     orders: {
       all: () => ['user', userId, 'orders'] as const,
-      detail: (orderId: string) => ['user', userId, 'orders', orderId] as const,
+      list: (params: OrdersService.ListParams) =>
+        ['user', userId, 'orders', 'list', params] as const,
+      detail: (orderId: string) => ['user', userId, 'orders', 'detail', orderId] as const,
     },
     profile: () => ['user', userId, 'profile'] as const,
     wallets: () => ['user', userId, 'wallets'] as const,
