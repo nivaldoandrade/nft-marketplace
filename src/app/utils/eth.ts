@@ -17,6 +17,31 @@ export function toWei(value: string): bigint {
   return BigInt(integer) * WEI_PER_ETH + BigInt(paddedFraction);
 }
 
+export function fromWei(wei: bigint): string {
+  const integer = wei / WEI_PER_ETH;
+  const fraction = (wei % WEI_PER_ETH).toString().padStart(DECIMALS, '0').replace(/0+$/, '');
+
+  return fraction ? `${integer}.${fraction}` : integer.toString();
+}
+
+export function addEth(...values: string[]): string {
+  return fromWei(values.reduce((total, value) => total + toWei(value), 0n));
+}
+
+export function subtractEth(value: string, subtrahend: string): string {
+  const result = toWei(value) - toWei(subtrahend);
+
+  return fromWei(result > 0n ? result : 0n);
+}
+
+export function multiplyEth(value: string, quantity: number): string {
+  return fromWei(toWei(value) * BigInt(quantity));
+}
+
+export function percentOfEth(value: string, percent: number): string {
+  return fromWei((toWei(value) * BigInt(Math.round(percent * 100))) / 10_000n);
+}
+
 export function compareEth(a: string, b: string): number {
   const diff = toWei(a) - toWei(b);
 

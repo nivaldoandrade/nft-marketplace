@@ -11,6 +11,7 @@ function createSeed(): MockDb {
     users: Object.fromEntries(userFixtures.map((user) => [user.id, { ...user }])),
     sessions: {},
     favorites: structuredClone(favoriteFixtures),
+    carts: {},
   };
 }
 
