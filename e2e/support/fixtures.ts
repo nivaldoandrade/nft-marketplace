@@ -14,8 +14,17 @@ class App {
   constructor(private readonly page: Page) {}
 
   // signs in through the mocked API, so specs that are not about authentication skip the form
+  // the app only renders after the mocks start, so requests made after this are mocked
+  async waitForApp() {
+    await this.page.locator('#conteudo').waitFor({ state: 'attached' });
+  }
+
   async signIn(user: User = users.ana) {
-    await this.page.goto('/');
+    if (!this.page.url().startsWith('http')) {
+      await this.page.goto('/');
+    }
+
+    await this.waitForApp();
     const token = await this.page.evaluate(async ({ email, password }) => {
       const response = await fetch('/api/auth/sign-in', {
         method: 'POST',
@@ -30,6 +39,51 @@ class App {
       ([key, value]) => localStorage.setItem(key, value),
       [TOKEN_KEY, token],
     );
+  }
+
+  async isSignedIn() {
+    return this.page.evaluate((key) => !!localStorage.getItem(key), TOKEN_KEY);
+  }
+
+  // the header holds the account menu on desktop and the bottom navigation on mobile
+  async openAccountMenu() {
+    await this.page
+      .getByRole('button', { name: /^Conta/ })
+      .filter({ visible: true })
+      .first()
+      .click();
+  }
+
+  // desktop buys from the detail page; mobile uses the add-to-cart button of the bottom bar
+  async addToCart(nftId: string) {
+    await this.page.goto(`/nft/${nftId}`);
+
+    const addButton = this.page.getByRole('button', { name: 'Adicionar ao carrinho' });
+
+    if (await addButton.isVisible()) {
+      await addButton.click();
+      await this.page.getByText('Adicionado ao carrinho.').waitFor();
+      return;
+    }
+
+    await this.page
+      .getByRole('button', { name: /^Comprar/i })
+      .filter({ visible: true })
+      .click();
+    await this.page.waitForURL('**/carrinho');
+  }
+
+  async ordersCount() {
+    return this.page.evaluate(
+      () =>
+        Object.keys(JSON.parse(localStorage.getItem('@kurio:mock-db') ?? '{}').orders ?? {}).length,
+    );
+  }
+
+  // from the payment page to the review dialog, connecting the wallet on the way
+  async openReview() {
+    await this.page.getByRole('button', { name: 'Confirmar compra' }).click();
+    await this.page.getByRole('dialog').waitFor();
   }
 
   // events go through the simulated Socket.IO server, never straight to the UI
