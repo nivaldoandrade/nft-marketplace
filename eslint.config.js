@@ -80,7 +80,7 @@ export default tseslint.config(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
-      '@typescript-eslint/no-namespace': ['error', { allowDeclarations: true }],
+      '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/naming-convention': [
         'error',
         {

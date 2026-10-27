@@ -1,9 +1,12 @@
+import type { NftsService } from '@/app/services/NftsService';
+
 export const queryKeys = {
   session: () => ['session'] as const,
 
   nfts: {
     all: () => ['nfts'] as const,
-    list: (params: object) => ['nfts', 'list', params] as const,
+    list: (params: NftsService.ListParams) => ['nfts', 'list', params] as const,
+    featured: () => ['nfts', 'featured'] as const,
     detail: (nftId: string) => ['nfts', 'detail', nftId] as const,
   },
 
