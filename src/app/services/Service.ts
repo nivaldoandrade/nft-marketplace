@@ -1,15 +1,39 @@
-import { create, isAxiosError } from 'axios';
+import { AxiosError, create, isAxiosError } from 'axios';
 
 import { env } from '@/app/config/env';
 import { type ApiError, ErrorCode } from '@/app/errors/apiErrors';
 
-export abstract class Service {
-  private static interceptorId: number | undefined;
-
-  protected static client = create({
+function createClient() {
+  const client = create({
     baseURL: env.VITE_API_URL,
     timeout: 10_000,
   });
+
+  client.interceptors.response.use((response) => {
+    const contentType = String(response.headers['content-type'] ?? '');
+
+    if (response.status !== 204 && !contentType.includes('application/json')) {
+      return Promise.reject(
+        new AxiosError(
+          'Unexpected response format',
+          ErrorCode.INVALID_RESPONSE,
+          response.config,
+          response.request,
+          response,
+        ),
+      );
+    }
+
+    return response;
+  });
+
+  return client;
+}
+
+export abstract class Service {
+  private static interceptorId: number | undefined;
+
+  protected static client = createClient();
 
   static setAuthorizationToken(token: string) {
     this.client.defaults.headers.common['Authorization'] = `Bearer ${token}`;

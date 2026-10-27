@@ -29,6 +29,7 @@ export const ErrorCode = {
   SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
   TIMEOUT: 'TIMEOUT',
   NETWORK_ERROR: 'NETWORK_ERROR',
+  INVALID_RESPONSE: 'INVALID_RESPONSE',
 } as const;
 
 export type ErrorCode = ValueOf<typeof ErrorCode>;
@@ -62,6 +63,7 @@ export const ApiErrorMessages: Record<ErrorCode, string> = {
   SERVICE_UNAVAILABLE: 'Serviço indisponível no momento. Tente novamente em instantes.',
   TIMEOUT: 'A requisição demorou demais. Tente novamente.',
   NETWORK_ERROR: 'Sem conexão com o servidor. Verifique sua internet.',
+  INVALID_RESPONSE: 'O servidor enviou uma resposta inesperada. Tente novamente.',
 };
 
 export function getErrorMessage(code?: ErrorCode): string {
@@ -75,6 +77,10 @@ export function getApiErrorCode(error: unknown): ErrorCode | undefined {
 
   if (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT') {
     return ErrorCode.TIMEOUT;
+  }
+
+  if (error.code === ErrorCode.INVALID_RESPONSE) {
+    return ErrorCode.INVALID_RESPONSE;
   }
 
   if (!error.response) {
