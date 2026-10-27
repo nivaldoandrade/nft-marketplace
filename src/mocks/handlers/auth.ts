@@ -67,6 +67,7 @@ export const authHandlers = [
     };
 
     db.users[user.id] = user;
+    db.favorites[user.id] = [];
     persist();
 
     const session = createSession(user.id);

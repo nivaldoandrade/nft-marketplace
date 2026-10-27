@@ -23,3 +23,8 @@ export const userFixtures: UserRecord[] = [
     createdAt: '2026-02-02T12:00:00.000Z',
   },
 ];
+
+export const favoriteFixtures: Record<string, string[]> = {
+  usr_ana: ['sage-nomad-009', 'ivory-baron-088'],
+  usr_bruno: ['golden-beat-207'],
+};

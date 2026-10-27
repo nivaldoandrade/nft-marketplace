@@ -10,6 +10,7 @@ export type ScenarioConfig = {
   flaky: boolean;
   emptyCatalog: boolean;
   shortSession: boolean;
+  favoritesError: boolean;
 };
 
 export type Scenario = {
@@ -26,6 +27,7 @@ const defaultConfig: ScenarioConfig = {
   flaky: false,
   emptyCatalog: false,
   shortSession: false,
+  favoritesError: false,
 };
 
 export const scenarios: Scenario[] = [
@@ -41,6 +43,11 @@ export const scenarios: Scenario[] = [
   { id: 'flaky', label: 'Falha na primeira tentativa', config: { flaky: true } },
   { id: 'empty-catalog', label: 'Catálogo vazio', config: { emptyCatalog: true } },
   { id: 'short-session', label: 'Sessão curta (30s)', config: { shortSession: true } },
+  {
+    id: 'favorites-error',
+    label: 'Falha ao alterar a lista de interesse',
+    config: { favoritesError: true },
+  },
 ];
 
 function readInitialScenarioIds(): string[] {

@@ -25,4 +25,5 @@ export type MockDb = {
   nfts: Record<string, NftRecord>;
   users: Record<string, UserRecord>;
   sessions: Record<string, SessionRecord>;
+  favorites: Record<string, string[]>;
 };

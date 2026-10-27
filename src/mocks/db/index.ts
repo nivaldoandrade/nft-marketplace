@@ -1,7 +1,7 @@
 import { MOCK_DB_KEY, MOCK_DB_VERSION } from '@/mocks/config';
 import type { MockDb } from '@/mocks/db/types';
 import { createNftFixtures } from '@/mocks/fixtures/nfts';
-import { userFixtures } from '@/mocks/fixtures/users';
+import { favoriteFixtures, userFixtures } from '@/mocks/fixtures/users';
 
 function createSeed(): MockDb {
   return {
@@ -10,6 +10,7 @@ function createSeed(): MockDb {
     nfts: Object.fromEntries(createNftFixtures().map((nft) => [nft.id, nft])),
     users: Object.fromEntries(userFixtures.map((user) => [user.id, { ...user }])),
     sessions: {},
+    favorites: structuredClone(favoriteFixtures),
   };
 }
 
