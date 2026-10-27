@@ -4,6 +4,7 @@ import pluginRouter from '@tanstack/eslint-plugin-router';
 import prettierConfig from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
+import playwright from 'eslint-plugin-playwright';
 import prettierPlugin from 'eslint-plugin-prettier';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
@@ -103,6 +104,13 @@ export default tseslint.config(
     rules: {
       'react-refresh/only-export-components': 'off',
     },
+  },
+  {
+    ...playwright.configs['flat/recommended'],
+    files: ['e2e/**/*.ts'],
+    languageOptions: { globals: globals.node },
+    settings: { 'import/resolver': { typescript: { project: './tsconfig.e2e.json' } } },
+    rules: { ...playwright.configs['flat/recommended'].rules, 'react-hooks/rules-of-hooks': 'off' },
   },
   {
     files: ['*.config.{js,ts}'],
