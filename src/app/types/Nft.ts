@@ -63,6 +63,7 @@ export type NftSummary = {
   category: NftCategory;
   network: Network;
   collection: NftCollection;
+  version: number;
 };
 
 export type NftEdition = {

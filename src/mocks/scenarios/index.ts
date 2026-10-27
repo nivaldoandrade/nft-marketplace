@@ -11,6 +11,9 @@ export type ScenarioConfig = {
   emptyCatalog: boolean;
   shortSession: boolean;
   favoritesError: boolean;
+  realtimeAuto: boolean;
+  realtimeDuplicates: boolean;
+  realtimeUnstable: boolean;
 };
 
 export type Scenario = {
@@ -28,6 +31,9 @@ const defaultConfig: ScenarioConfig = {
   emptyCatalog: false,
   shortSession: false,
   favoritesError: false,
+  realtimeAuto: true,
+  realtimeDuplicates: false,
+  realtimeUnstable: false,
 };
 
 export const scenarios: Scenario[] = [
@@ -47,6 +53,17 @@ export const scenarios: Scenario[] = [
     id: 'favorites-error',
     label: 'Falha ao alterar a lista de interesse',
     config: { favoritesError: true },
+  },
+  { id: 'realtime-off', label: 'Sem eventos automáticos', config: { realtimeAuto: false } },
+  {
+    id: 'realtime-duplicates',
+    label: 'Eventos duplicados e fora de ordem',
+    config: { realtimeDuplicates: true },
+  },
+  {
+    id: 'realtime-unstable',
+    label: 'Conexão em tempo real instável',
+    config: { realtimeUnstable: true },
   },
 ];
 

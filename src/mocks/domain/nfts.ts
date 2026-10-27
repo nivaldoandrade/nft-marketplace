@@ -12,6 +12,7 @@ export function toNftSummary(nft: NftRecord): NftSummary {
     category: nft.category,
     network: nft.network,
     collection: nft.collection,
+    version: nft.version,
   };
 }
 

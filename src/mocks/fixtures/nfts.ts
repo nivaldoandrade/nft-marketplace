@@ -274,6 +274,7 @@ function buildNft(seed: FeaturedSeed, index: number, random: () => number): NftR
     category: seed.category,
     network: seed.network,
     collection: collections[seed.artwork],
+    version: 1,
     createdAt: new Date(BASE_DATE - index * DAY_MS).toISOString(),
     popularity: randomInt(random, 0, 1000),
     ...buildDetails(id, seed),
