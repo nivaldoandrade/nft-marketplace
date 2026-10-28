@@ -112,6 +112,18 @@ Variações de medida entre elementos que representam o mesmo componente. Foram 
 | Cadastro (mobile)          | Placeholder de "Nome de usuário" centralizado; demais campos alinhados à esquerda                                                                 | Todos os campos alinhados à esquerda                                                                                                        |
 | Login e cadastro (desktop) | Modal de login sem cantos arredondados; modal de cadastro com 8px                                                                                 | Os dois modais com 8px                                                                                                                      |
 
+#### Mantidas como no Figma
+
+Espaçamentos que parecem inconsistentes, mas foram conferidos no Figma e mantidos como estão no frame, para preservar a fidelidade visual.
+
+| Página    | Elemento                      | No Figma (e na implementação)                                                                                                                                                                                                                                                             |
+| --------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Início    | Banners promocionais          | A descrição começa a 6px da imagem, e o botão "Explorar" fica encostado no fim da descrição: no Figma o texto ultrapassa a própria caixa e chega a 2px do botão no primeiro banner e passa por cima dele no segundo. Na implementação o botão fica logo abaixo do texto, sem sobreposição |
+| Início    | Diário da Cunhagem            | 4 cards de 268px com 24px entre eles (1144px), alinhados à esquerda na área de 1200px: sobram 56px à direita, enquanto as demais seções ocupam a largura toda                                                                                                                             |
+| Rodapé    | Botão "Enviar" da newsletter  | 85px de largura, com 16px de espaço à esquerda e 4px à direita, então o texto não fica centralizado                                                                                                                                                                                       |
+| Rodapé    | Faixa "Carteiras compatíveis" | 228px de largura, com cerca de 10px de espaço à esquerda e 2px à direita do texto                                                                                                                                                                                                         |
+| Carteiras | Botão "Salvar carteira"       | 131px de largura para um texto de 127px, com cerca de 2px de cada lado                                                                                                                                                                                                                    |
+
 ### Outros desvios conscientes
 
 - **NFT em destaque (início):** 476px contra 470px; no Figma o próprio conteúdo ultrapassa a caixa.
